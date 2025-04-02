@@ -1,0 +1,110 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./MainPage.css";
+import { faPlayCircle, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import config from "../config";
+import { useNavigate } from "react-router";
+import { removeQuotes } from "../utils/utils";
+
+function MainPage() {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState<string>("");
+
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Username submitted:", username);
+    signup(username);
+  };
+
+  const signup = async (username: string) => {
+    try {
+      const response = await fetch(
+        `http://${config.serverHost}:${config.serverPort}/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "SignUp",
+            username: username,
+          }),
+        }
+      );
+      if (response.ok) {
+        console.log("User signed up successfully");
+        await login(username);
+      } else if (response.status === 400) {
+        /* Already signup */
+        await login(username);
+      } else {
+        console.error("Signup failed - Response status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
+  };
+
+  const login = async (username: string) => {
+    try {
+      const response = await fetch(
+        `http://${config.serverHost}:${config.serverPort}/auth/login/${username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        const token = await response.text();
+        console.log("User logged in successfully with token: ", token);
+        /* TODO: Improve this? */
+        localStorage.setItem("token", removeQuotes(token));
+        localStorage.setItem("username", username);
+        navigate("/rooms");
+      } else {
+        console.error("Login failed");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  };
+
+  return (
+    <div className="main-page-container">
+      <h1 className="main-title">Link Game</h1>
+      <div className="input-container">
+        {/* TODO: Maybe change this and divide it into login and signup */}
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username" className="label-username">
+            Username
+          </label>
+          <div className="input-field">
+            <FontAwesomeIcon icon={faUser} className="input-field-icon" />
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              value={username}
+              onChange={handleUsernameChange}
+              required
+            />
+          </div>
+          <button type="submit" className="start-button">
+            {/* TODO: Maybe change this name */}
+            <span>Start Game</span>
+            <FontAwesomeIcon icon={faPlayCircle} />
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default MainPage;

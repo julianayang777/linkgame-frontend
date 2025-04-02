@@ -1,0 +1,15 @@
+.tile.hidden {
+  visibility: hidden;
+}
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* shape */
+  /* border: 1px solid #000000; */
+  background-color: rgba(155, 155, 155, 0.2);
+  /* text */
+  font-size: 48px;
+  text-align: center;
+}
