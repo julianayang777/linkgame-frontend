@@ -18,6 +18,12 @@
 }
 
 .signout-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   /* shape */
   padding: 12px 12px;
   background: #000000;

@@ -9,11 +9,14 @@
   /* shape */
   /* border: 1px solid #000000; */
   background-color: rgba(155, 155, 155, 0.2);
+  cursor: default;
   /* text */
   font-size: 48px;
   text-align: center;
+  user-select: none;
 }
 
 .selected {
   background-color: rgba(155, 155, 155, 0.75);
+  border: 1px solid #000000;
 }

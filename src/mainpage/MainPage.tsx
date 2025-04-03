@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./MainPage.css";
-import { faPlayCircle, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faSignIn, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import config from "../config";
 import { useNavigate } from "react-router";
@@ -97,9 +97,8 @@ function MainPage() {
             />
           </div>
           <button type="submit" className="start-button">
-            {/* TODO: Maybe change this name */}
-            <span>Start Game</span>
-            <FontAwesomeIcon icon={faPlayCircle} />
+            <span>Enter</span>
+            <FontAwesomeIcon icon={faSignIn} />
           </button>
         </form>
       </div>

@@ -1,0 +1,180 @@
+.modal {
+  /* layout */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* shape */
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
+  width: 380px;
+  min-height: 420spx;
+  box-sizing: border-box;
+  border-radius: 8px;
+  /* text */
+  font-size: large;
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  /* shape */
+  width: 100%;
+  box-sizing: border-box;
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+.modal-header h3 {
+  margin-left: 20px;
+}
+
+.close-button {
+  margin-right: 20px;
+  /* shape */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.close-button svg {
+  height: 20px;
+  color: #9ca3af;
+}
+
+/* Content */
+.modal-content {
+  padding: 12px 24px 24px 24px;
+  /* shape */
+  box-sizing: border-box;
+  justify-content: flex-start; /* Make sure content fills the available space */
+  flex-grow: 1; /* Allow it to take remaining space */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 24px 0px;
+  box-sizing: border-box;
+}
+
+.form-group label {
+  font-size: 16px;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+#number-players {
+  width: 100%;
+  padding: 12px;
+  background: #ffffff;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#number-players::placeholder {
+  text-align: center;
+}
+
+#number-players:hover {
+  border: 1px solid black;
+}
+
+#number-players:focus::placeholder {
+  color: transparent;
+}
+
+#number-players:focus {
+  border-width: 1px;
+  border-color: #000000;
+  outline: 1px solid black;
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.difficulty-buttons button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: #ffffff;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.difficulty-buttons button span {
+  margin-left: 8px;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+  color: #374151;
+}
+
+.difficulty-buttons button:hover {
+  border-width: 1px;
+  border-color: #000000;
+}
+
+.difficulty-buttons .selected {
+  border-width: 1px;
+  border-color: #000000;
+  outline: 1px solid black;
+}
+
+.red {
+  color: #ef4444;
+}
+
+.green {
+  color: #22c55e;
+}
+
+.yellow {
+  color: #eab308;
+}
+
+.create-room-button {
+  /* layout */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  /* shape */
+  padding: 12px;
+  background: #000000;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 0px;
+  cursor: pointer;
+
+  /* text */
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.form-error {
+  /* FIXME: when showing error the modal height increases */
+  color: red;
+  font-size: 14px;
+}

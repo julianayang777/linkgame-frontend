@@ -120,6 +120,7 @@ function Game() {
   };
 
   return (
+    // TODO: Error handling
     <div className="game-container">
       <Header />
       <div className="game">

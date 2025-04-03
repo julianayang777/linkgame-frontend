@@ -1,4 +1,13 @@
+.rooms {
+  margin: 40px;
+}
+
 .new-room-button {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   /* shape */
   padding: 12px 12px;
   background: #000000;

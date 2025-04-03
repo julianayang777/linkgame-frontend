@@ -5,13 +5,27 @@ import { GameLevel } from "../types/types";
 import { useNavigate } from "react-router";
 import { removeQuotes } from "../utils/utils";
 import Header from "../components/Header";
+import CreateRoomModal from "./CreateRoomModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Rooms() {
   const navigate = useNavigate();
-  const [requiredPlayers, setRequiredPlayers] = useState<number>(1);
-  const [gameLevel, setGameLevel] = useState<GameLevel>(GameLevel.EASY);
+  const [showCreateRoomModal, setShowCreateRoomModal] =
+    useState<boolean>(false);
 
-  const handleNewRoom = async () => {
+  const handleNewRoom = () => {
+    setShowCreateRoomModal(true);
+  };
+
+  const cancelCreateRoom = () => {
+    setShowCreateRoomModal(false);
+  };
+
+  const createNewRoom = async (
+    requiredPlayers: number,
+    gameLevel: GameLevel
+  ) => {
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("User not authenticated?");
@@ -45,15 +59,22 @@ function Rooms() {
     /* TODO: Table with the list of rooms
      * TODO: Each room should have game-level, game-state, number of players, button to join the room
      * TODO: Somehow to show the leaderboard of the user and for each level
-     * TODO: Should have an input to know how many players should be in the room and the level
+     * TODO: Error handling
      */
     <div className="game-container">
       <Header />
       <div className="rooms">
         <h1>Rooms</h1>
         <button className="new-room-button" onClick={handleNewRoom}>
-          New Room
+          <span>New Room</span>
+          <FontAwesomeIcon icon={faPlus} />
         </button>
+        {showCreateRoomModal && (
+          <CreateRoomModal
+            onClose={cancelCreateRoom}
+            onCreate={createNewRoom}
+          />
+        )}
       </div>
     </div>
   );
