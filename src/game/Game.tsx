@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { Board } from "../types/types";
+import { Board, Coordinate } from "../types/types";
 import config from "../config";
 import Tile from "./Tile";
 import "./Game.css";
+import Header from "../components/Header";
 
 function Game() {
   const { level, roomId } = useParams();
   const wsRef = useRef<WebSocket | null>(null);
   const [board, setBoard] = useState<Board | null>(null);
-  const [x1, setX1] = useState<string>("");
-  const [y1, setY1] = useState<string>("");
-  const [x2, setX2] = useState<string>("");
-  const [y2, setY2] = useState<string>("");
+  const [tile1, setTile1] = useState<Coordinate | null>(null);
+  const [tile2, setTile2] = useState<Coordinate | null>(null);
+  /* TEMP: Game Message */
+  const [gameMessage, setGameMessage] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,14 +35,53 @@ function Game() {
 
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("Message from server:", message);
       // TODO: Update game state based on the message
-      console.log(message.playerBoards[username]);
-      setBoard(message.playerBoards[username]);
+      console.log("Message from server:", message);
+      if (message.type === "Awaiting") {
+        console.log("Awaiting other players");
+        setGameMessage("Waiting for other players to join...");
+      } else if (message.type === "GameStartsSoon") {
+        console.log("Game start soon in 5 seconds");
+        setGameMessage("Game starting soon...");
+      } else if (message.type === "InProgress") {
+        console.log("Game in progress");
+        console.log(message.playerBoards[username]);
+        setBoard(message.playerBoards[username]);
+      } else if (message.type === "Win") {
+        console.log(`Player "${message.winner.name}" wins!`);
+        setBoard(null);
+        setGameMessage(`Player "${message.winner.name}" wins!`);
+      }
     };
 
-    ws.onerror = (error) => {
+    ws.onerror = async (error) => {
       console.error("WebSocket error:", error);
+      /* Maybe the game has ended */
+      try {
+        const response = await fetch(
+          `http://${config.serverHost}:${config.serverPort}/game/${roomId}/status`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const gameStatus = await response.json();
+          console.log("Game status:", gameStatus);
+          if (gameStatus.type === "Win") {
+            setGameMessage(
+              `Game has ended\n Player "${gameStatus.winner.name}" won!`
+            );
+          } else {
+            setGameMessage("Game Status = " + gameStatus.type);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching game status:", error);
+      }
     };
 
     ws.onclose = () => {
@@ -49,99 +89,61 @@ function Game() {
     };
   }, [roomId]);
 
-  const sendMatch = () => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      const message = {
-        type: "Match",
-        p1: {
-          row: x1,
-          column: y1,
-        },
-        p2: {
-          row: x2,
-          column: y2,
-        },
-      };
-      wsRef.current.send(JSON.stringify(message));
-      console.log("Message sent:", message);
-    } else {
-      console.error("WebSocket is not connected");
+  useEffect(() => {
+    if (tile1 && tile2) {
+      console.log("Tiles selected:", tile1, tile2);
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        const message = {
+          type: "Match",
+          p1: {
+            row: tile1.x,
+            column: tile1.y,
+          },
+          p2: {
+            row: tile2.x,
+            column: tile2.y,
+          },
+        };
+        wsRef.current.send(JSON.stringify(message));
+        console.log("Message sent:", message);
+      } else {
+        console.error("WebSocket is not connected");
+      }
+      setTile1(null);
+      setTile2(null);
     }
+  }, [tile1, tile2]);
+
+  const handleClick = (x: number, y: number) => {
+    console.log("Tile clicked at coordinates:", x, y);
+    return tile1 ? setTile2({ x, y }) : setTile1({ x, y });
   };
 
   return (
     <div className="game-container">
-      <h1>Link Game</h1>
+      <Header />
       <div className="game">
-        <div className={`board ${level}-grid`}>
-          {board ? (
-            board.map((row, rowIndex) =>
+        {board ? (
+          <div className={`board ${level}-grid`}>
+            {board.map((row, rowIndex) =>
               row.map((tile, colIndex) => (
-                <Tile key={`${rowIndex}-${colIndex}`} value={tile} />
+                <Tile
+                  key={`${rowIndex}-${colIndex}`}
+                  value={tile}
+                  position={{ x: rowIndex, y: colIndex }}
+                  isSelected={
+                    (tile1 && tile1.x === rowIndex && tile1.y === colIndex) ||
+                    (tile2 && tile2.x === rowIndex && tile2.y === colIndex) ||
+                    false
+                  }
+                  onClick={handleClick}
+                />
               ))
-            )
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
-
-        <div className="points-selection">
-          <form className="points-form" onSubmit={sendMatch}>
-            <div className="point-form">
-              <label htmlFor="point1" className="point-label">
-                Coordinates of 1st tile
-              </label>
-              <div className="input-field">
-                <span className="input-label">X1</span>
-                <input
-                  name="x1"
-                  type="number"
-                  value={x1}
-                  onChange={(e) => setX1(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="input-field">
-                <span className="input-label">Y1</span>
-                <input
-                  name="y1"
-                  type="number"
-                  value={y1}
-                  onChange={(e) => setY1(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <div className="point-form">
-              <label htmlFor="point2" className="point-label">
-                Coordinates of 2nd tile
-              </label>
-              <div className="input-field">
-                <span className="input-label">X2</span>
-                <input
-                  name="x2"
-                  type="number"
-                  required
-                  onChange={(e) => setX2(e.target.value)}
-                  value={x2}
-                />
-              </div>
-              <div className="input-field">
-                <span className="input-label">Y2</span>
-                <input
-                  name="y2"
-                  type="number"
-                  required
-                  value={y2}
-                  onChange={(e) => setY2(e.target.value)}
-                />
-              </div>
-            </div>
-            <button type="submit" className="send-button">
-              Match Tiles
-            </button>
-          </form>
-        </div>
+            )}
+          </div>
+        ) : (
+          <p>{gameMessage}</p>
+        )}
       </div>
     </div>
   );

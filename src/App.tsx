@@ -9,7 +9,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/rooms" element={<Rooms />} />
-          <Route path="/room/:level/:roomId" element={<Game />} />
+          <Route path="/rooms/:level/:roomId" element={<Game />} />
         </Routes>
       </BrowserRouter>
   );

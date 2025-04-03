@@ -4,6 +4,7 @@ import "./Rooms.css";
 import { GameLevel } from "../types/types";
 import { useNavigate } from "react-router";
 import { removeQuotes } from "../utils/utils";
+import Header from "../components/Header";
 
 function Rooms() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function Rooms() {
       if (response.ok) {
         const roomId = await response.text();
         console.log(`New room created: ${roomId}`);
-        navigate(`/room/${GameLevel.EASY}/${removeQuotes(roomId)}`);
+        navigate(`/rooms/${gameLevel}/${removeQuotes(roomId)}`);
       } else {
         console.error("Failed to create room");
       }
@@ -46,11 +47,14 @@ function Rooms() {
      * TODO: Somehow to show the leaderboard of the user and for each level
      * TODO: Should have an input to know how many players should be in the room and the level
      */
-    <div className="container">
-      <h1>Rooms</h1>
-      <button className="new-room-button" onClick={handleNewRoom}>
-        New Room
-      </button>
+    <div className="game-container">
+      <Header />
+      <div className="rooms">
+        <h1>Rooms</h1>
+        <button className="new-room-button" onClick={handleNewRoom}>
+          New Room
+        </button>
+      </div>
     </div>
   );
 }

@@ -19,4 +19,9 @@ export enum GameLevel {
   HARD = "hard",
 }
 
+export type Coordinate = {
+  x: number;
+  y: number;
+};
+
 export type Board = number[][];
