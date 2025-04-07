@@ -129,7 +129,7 @@ function Game() {
   return (
     // TODO: Error handling
     <div className="game-container">
-      <Header />
+      <Header hasBackButton={true} />
       <div className="game">
         {board ? (
           <div className={`board ${level}-grid`}>

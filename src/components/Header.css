@@ -19,12 +19,7 @@
   grid-column: 2;
 }
 
-.signout-button {
-  /* layout out */
-  width: auto;
-  justify-self: end;
-  align-self: center;
-  margin: 0px 24px;
+.game-header-content button {
   /* layout in */
   display: flex;
   flex-direction: row;
@@ -45,4 +40,20 @@
   font-weight: 500;
   line-height: 24px;
   text-align: center;
+}
+
+.signout-button {
+  /* layout out */
+  width: auto;
+  justify-self: flex-end;
+  align-self: center;
+  margin: 0px 24px;
+}
+
+.back-button {
+  /* layout out */
+  width: auto;
+  justify-self: flex-start;
+  align-self: center;
+  margin: 0px 24px;
 }

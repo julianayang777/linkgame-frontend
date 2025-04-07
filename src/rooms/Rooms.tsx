@@ -101,7 +101,7 @@ function Rooms() {
      * TODO: Error handling
      */
     <div className="game-container">
-      <Header />
+      <Header hasBackButton={false} />
       {showCreateRoomModal && (
         <CreateRoomModal onClose={cancelCreateRoom} onCreate={createNewRoom} />
       )}

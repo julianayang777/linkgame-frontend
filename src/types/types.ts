@@ -33,4 +33,5 @@ export interface RoomState {
   joinedPlayers: number;
   requiredPlayers: number;
   status: "Awaiting Players" | "Starts Soon" | "In Progress" | "Finished", 
+  wasInRoom: boolean;
 }

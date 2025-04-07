@@ -9,6 +9,12 @@ import { removeQuotes } from "../utils/utils";
 function MainPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const validateUsername = (username: string) => {
+    const regex = /^[a-zA-Z0-9_]{3,20}$/;
+    return regex.test(username);
+  };
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -17,6 +23,12 @@ function MainPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Username submitted:", username);
+    if (!validateUsername(username)) {
+      setError(
+        "Username must be 3-20 characters long and can only contain letters, numbers, and underscores."
+      );
+      return;
+    }
     signup(username);
   };
 
@@ -79,7 +91,6 @@ function MainPage() {
     <div className="main-page-container">
       <h1 className="main-title">Link Game</h1>
       <div className="input-container">
-        {/* TODO: Maybe change this and divide it into login and signup */}
         <form onSubmit={handleSubmit}>
           <label htmlFor="username" className="label-username">
             Username
@@ -95,6 +106,9 @@ function MainPage() {
               onChange={handleUsernameChange}
               required
             />
+          </div>
+          <div className={`error-message-container ${error ? "show" : ""}`}>
+            {error && <p className="error-message">{error}</p>}
           </div>
           <button type="submit" className="start-button">
             <span>Enter</span>
