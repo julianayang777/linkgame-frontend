@@ -1,11 +1,16 @@
+.item-actions {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+}
+
 .join-button {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   /* shape */
-  padding: 12px 12px;
+  padding: 6px 18px;
   background: #000000;
   border: 0px;
   border-radius: 4px;
@@ -19,13 +24,7 @@
   text-align: center;
 }
 
-.room-item-actions {
-  text-align: center; 
-  vertical-align: middle; 
-}
-
-.item-actions {
-  display: flex;
-  justify-content: center; 
-  align-items: center;
+.join-button:disabled {
+  cursor: default;
+  opacity: 0.3;
 }

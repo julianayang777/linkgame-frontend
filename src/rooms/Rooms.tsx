@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import RoomList from "./room-list/RoomList";
 
-
 function Rooms() {
   const navigate = useNavigate();
   const [showCreateRoomModal, setShowCreateRoomModal] =
@@ -93,6 +92,10 @@ function Rooms() {
     getRoomList();
   }, []);
 
+  const joinRoom = (room: RoomState) => {
+    navigate(`/rooms/${room.level}/${room.id}`);
+  };
+
   return (
     /* TODO: Somehow to show the leaderboard of the user and for each level
      * TODO: Error handling
@@ -111,7 +114,7 @@ function Rooms() {
           </button>
         </div>
 
-        <RoomList data={rooms} />
+        <RoomList data={rooms} onClick={joinRoom} />
       </div>
     </div>
   );
