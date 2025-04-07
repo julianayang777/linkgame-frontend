@@ -37,7 +37,7 @@ function Game() {
       const message = JSON.parse(event.data);
       // TODO: Update game state based on the message
       console.log("Message from server:", message);
-      if (message.type === "Awaiting") {
+      if (message.type === "AwaitingPlayers") {
         console.log("Awaiting other players");
         setGameMessage("Waiting for other players to join...");
       } else if (message.type === "GameStartsSoon") {
@@ -92,25 +92,32 @@ function Game() {
   useEffect(() => {
     if (tile1 && tile2) {
       console.log("Tiles selected:", tile1, tile2);
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        const message = {
-          type: "Match",
-          p1: {
-            row: tile1.x,
-            column: tile1.y,
-          },
-          p2: {
-            row: tile2.x,
-            column: tile2.y,
-          },
-        };
-        wsRef.current.send(JSON.stringify(message));
-        console.log("Message sent:", message);
-      } else {
-        console.error("WebSocket is not connected");
-      }
-      setTile1(null);
-      setTile2(null);
+      const idTimeout = setTimeout(() => {
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+          const message = {
+            type: "Match",
+            p1: {
+              row: tile1.x,
+              column: tile1.y,
+            },
+            p2: {
+              row: tile2.x,
+              column: tile2.y,
+            },
+          };
+          wsRef.current.send(JSON.stringify(message));
+          console.log("Message sent:", message);
+        } else {
+          console.error("WebSocket is not connected");
+        }
+        setTile1(null);
+        setTile2(null);
+        clearTimeout(idTimeout);
+      }, 150);
+
+      return () => {
+        clearTimeout(idTimeout);
+      };
     }
   }, [tile1, tile2]);
 

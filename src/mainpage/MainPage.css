@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
   align-content: center;
   height: 100vh;
 }
@@ -19,7 +18,6 @@
   display: flex;
   flex-direction: column;
   padding: 32px;
-  flex-wrap: wrap;
   align-content: flex-start;
   background: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);

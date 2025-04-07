@@ -1,17 +1,6 @@
-.rooms {
-  margin: 40px;
-}
-
-.rooms-header {
+.join-button {
   display: flex;
   flex-direction: row;
-  justify-content:flex-end;
-  align-items: center;
-}
-
-.new-room-button {
-  display: flex;
-  flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -28,4 +17,15 @@
   font-weight: 500;
   line-height: 24px;
   text-align: center;
+}
+
+.room-item-actions {
+  text-align: center; 
+  vertical-align: middle; 
+}
+
+.item-actions {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
 }

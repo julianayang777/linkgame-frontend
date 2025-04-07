@@ -25,3 +25,12 @@ export type Coordinate = {
 };
 
 export type Board = number[][];
+
+export interface RoomState {
+  id: string;
+  name: string;
+  level: GameLevel;
+  joinedPlayers: number;
+  requiredPlayers: number;
+  status: "Awaiting Players" | "Starts Soon" | "In Progress" | "Finished", 
+}

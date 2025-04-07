@@ -1,8 +1,6 @@
 .game-header {
-  display: flex;
-  justify-content: center;
   /* shape */
-  padding: 5px 5px;
+  padding: 5px 0px;
   background: #ffffff;
   box-sizing: border-box;
   border-color: #b8b8c1;
@@ -11,13 +9,23 @@
 }
 
 .game-header-content {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.game-header-content h2 {
+  text-align: center;
+  grid-column: 2;
 }
 
 .signout-button {
+  /* layout out */
+  width: auto;
+  justify-self: end;
+  align-self: center;
+  margin: 0px 24px;
+  /* layout in */
   display: flex;
   flex-direction: row;
   justify-content: center;

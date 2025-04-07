@@ -1,0 +1,53 @@
+.room-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#rooms {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  border-radius: 4px;
+}
+
+#rooms td,
+#rooms th {
+  border: 1px #ddd;
+  padding: 8px;
+}
+
+/* table with rounded border */
+#rooms th:first-child {
+  border-top-left-radius: 4px;
+}
+
+#rooms th:last-child{
+  border-top-right-radius: 4px;
+}
+
+#rooms tr:last-child td:first-child {
+  border-bottom-left-radius: 4px;
+}
+
+#rooms tr:last-child td:last-child {
+  border-bottom-right-radius: 4px;
+}
+
+#rooms th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #000000;
+  color: white;
+  text-transform: uppercase;
+}
+
+#rooms tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#rooms tr:hover {
+  background-color: #ddd;
+}
