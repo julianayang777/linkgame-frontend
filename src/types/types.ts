@@ -19,11 +19,33 @@ export enum GameLevel {
   HARD = "hard",
 }
 
+export enum ErrorMessage {
+  ServerError = "[Server Error] Unable to connect to the server. Please try again later.",
+  UserNotAuthenticated = "User not authenticated.",
+  UserNotFound = "User not found.",
+  InvalidUsername = "Username must be 3-20 characters long and can only contain letters, numbers, and underscores.",
+  InvalidNumberOfPlayers = "Number of players must be an integer greater than 0.",
+  UnexpectedError = "An unexpected error occurred. Please try again later.",
+  FailedRetrievePlayer = "Failed to retrieve player.",
+  ConnectionError = "Connection error. Please check your network connection.",
+  RoomNotFound = "Room not found.",
+  PlayerNotFound = "Player not found. Please signup.",
+}
+
+export enum ServerResponseError {
+  UserAlreadyExists = "server.auth.UserAlreadyExists$",
+  UserNotFound = "server.auth.UserNotFound$",
+  PlayerNotFound = "server.player.PlayerNotFound$",
+  NumberPlayersNotInteger = "Invalid number of players: could not parse the input as an integer.",
+  NumberPlayersNotGreaterThanZero = "Invalid number of players: must be greater than 0.",
+  FailedRetrievePlayer = "Failed to retrieve player.",
+  RoomNotFound = "Room {roomId} not found.",
+}
+
 export type Coordinate = {
   x: number;
   y: number;
 };
-
 export type Board = number[][];
 
 export interface RoomState {
@@ -32,6 +54,6 @@ export interface RoomState {
   level: GameLevel;
   joinedPlayers: number;
   requiredPlayers: number;
-  status: "Awaiting Players" | "Starts Soon" | "In Progress" | "Finished", 
-  wasInRoom: boolean;
+  status: "Awaiting Players" | "Starts Soon" | "In Progress" | "Finished";
+  canJoin: boolean;
 }

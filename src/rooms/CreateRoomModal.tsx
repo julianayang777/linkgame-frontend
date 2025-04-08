@@ -5,14 +5,19 @@ import { GameLevel } from "../types/types";
 import { useState } from "react";
 
 interface CreateRoomModalProps {
+  errorMessage: string;
   onClose: () => void;
   onCreate: (numberOfPlayers: number, gameLevel: GameLevel) => void;
 }
 
-function CreateRoomModal({ onClose, onCreate }: CreateRoomModalProps) {
+function CreateRoomModal({
+  errorMessage,
+  onClose,
+  onCreate,
+}: CreateRoomModalProps) {
   const [requiredPlayers, setRequiredPlayers] = useState<number | null>(null);
   const [gameLevel, setGameLevel] = useState<GameLevel>(GameLevel.EASY);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
 
   const handleRequiredPlayersChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -32,16 +37,14 @@ function CreateRoomModal({ onClose, onCreate }: CreateRoomModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(requiredPlayers);
-    console.log(Boolean(requiredPlayers));
     if (requiredPlayers && requiredPlayers > 0) {
-      console.log(
+      console.debug(
         `Creating room with ${requiredPlayers} players and game level ${gameLevel}`
       );
       onCreate(requiredPlayers, gameLevel);
     } else {
       setError("Number of players must be at least 1");
-      console.log("Number of players must be at least 1");
+      console.debug("Number of players must be at least 1");
     }
   };
 
@@ -67,7 +70,6 @@ function CreateRoomModal({ onClose, onCreate }: CreateRoomModalProps) {
               value={requiredPlayers ?? ""}
               onChange={handleRequiredPlayersChange}
               min={1}
-              // pattern="(?:0|[1-9]\d*)"
               required
             ></input>
           </div>
@@ -104,7 +106,7 @@ function CreateRoomModal({ onClose, onCreate }: CreateRoomModalProps) {
           </div>
 
           <div className={`form-error ${error ? "show" : ""}`}>
-            {error && `Error: ${error}`}
+            {(error && `Error: ${error}`) || errorMessage}
           </div>
 
           <button type="submit" className="create-room-button">

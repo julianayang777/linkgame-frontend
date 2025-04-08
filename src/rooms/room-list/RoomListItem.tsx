@@ -21,8 +21,11 @@ function RoomListItem({ room, onClick }: RoomListItemProps) {
       <td className="room-item-actions">
         <ItemActions
           onClick={handleJoin}
-          isDisabled={room.status === "Finished" && room.joinedPlayers === room.requiredPlayers
-            || !room.wasInRoom}
+          isDisabled={
+            (room.status === "Finished" &&
+              room.joinedPlayers === room.requiredPlayers) ||
+            !room.canJoin
+          }
         />
       </td>
     </tr>

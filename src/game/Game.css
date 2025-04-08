@@ -1,4 +1,4 @@
-:root {
+.board {
   --grid-size: 60px;
 }
 
@@ -23,9 +23,13 @@
   grid-template-rows: repeat(12, var(--grid-size));
 }
 
-.game {
+.game-content {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.game-content .error-message {
+  color: var(--error-message-color);
 }

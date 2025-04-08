@@ -14,7 +14,9 @@ function Tile({ value, onClick, position, isSelected }: TileProps) {
   };
   return (
     <div
-      className={`tile ${value === 0 ? "hidden" : ""} ${isSelected ? "selected" : ""}`}
+      className={`tile ${value === 0 ? "hidden" : ""} ${
+        isSelected ? "selected" : ""
+      }`}
       onClick={handleClick}
     >
       <span className="tile-content">{boardAssets[value]}</span>

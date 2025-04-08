@@ -5,6 +5,7 @@ import { useState } from "react";
 import config from "../config";
 import { useNavigate } from "react-router";
 import { removeQuotes } from "../utils/utils";
+import { ErrorMessage, ServerResponseError } from "../types/types";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -22,11 +23,9 @@ function MainPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Username submitted:", username);
+    console.debug("Username submitted:", username);
     if (!validateUsername(username)) {
-      setError(
-        "Username must be 3-20 characters long and can only contain letters, numbers, and underscores."
-      );
+      setError(ErrorMessage.InvalidUsername);
       return;
     }
     signup(username);
@@ -48,16 +47,26 @@ function MainPage() {
         }
       );
       if (response.ok) {
-        console.log("User signed up successfully");
+        console.debug("User signed up successfully");
         await login(username);
       } else if (response.status === 400) {
-        /* Already signup */
-        await login(username);
+        const errorMessage = await response.text();
+        if (
+          removeQuotes(errorMessage) === ServerResponseError.UserAlreadyExists
+        ) {
+          /* Already signup */
+          await login(username);
+        } else {
+          console.error("Error message:", errorMessage);
+          setError(ErrorMessage.UnexpectedError);
+        }
       } else {
         console.error("Signup failed - Response status:", response.status);
+        setError(ErrorMessage.UnexpectedError);
       }
     } catch (error) {
       console.error("Error during signup:", error);
+      setError(ErrorMessage.ServerError);
     }
   };
 
@@ -74,16 +83,22 @@ function MainPage() {
       );
       if (response.ok) {
         const token = await response.text();
-        console.log("User logged in successfully with token: ", token);
+        console.debug("User logged in successfully with token: ", token);
         /* TODO: Improve this? */
         localStorage.setItem("token", removeQuotes(token));
         localStorage.setItem("username", username);
         navigate("/rooms");
-      } else {
-        console.error("Login failed");
+      } else if (response.status === 400) {
+        const errorMessage = await response.text();
+        if (removeQuotes(errorMessage) === ServerResponseError.UserNotFound) {
+          setError(ErrorMessage.UserNotFound);
+        } else {
+          setError(ErrorMessage.UnexpectedError);
+        }
       }
     } catch (error) {
       console.error("Error during login:", error);
+      setError(ErrorMessage.ServerError);
     }
   };
 

@@ -1,4 +1,13 @@
 .room-list {
+  --table-header-background-color: var(--button-background-color);
+  --table-header-text-color: var(--button-text-color);
+  --table-row-hover-color: #ddd;
+  --table-row-background-color-1: white;
+  --table-row-background-color-2: #f2f2f2;
+  --table-text-color: var(--button-background-color);
+}
+
+.room-list {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,6 +26,7 @@
 #rooms th {
   border: 1px #ddd;
   padding: 8px;
+  color: var(--table-text-color);
 }
 
 /* table with rounded border */
@@ -39,15 +49,19 @@
 #rooms th {
   padding-top: 12px;
   padding-bottom: 12px;
-  background-color: #000000;
-  color: white;
+  background-color: var(--table-header-background-color);
+  color: var(--table-header-text-color);
   text-transform: uppercase;
 }
 
+#rooms tr:nth-child(odd) {
+  background-color: var(--table-row-background-color-1);
+}
+
 #rooms tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: var(--table-row-background-color-2);
 }
 
 #rooms tr:hover {
-  background-color: #ddd;
+  background-color: var(--table-row-hover-color);
 }

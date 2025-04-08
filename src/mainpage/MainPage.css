@@ -1,4 +1,12 @@
 .main-page-container {
+  --title-color: var(--button-background-color);
+  --focus-color: var(--button-background-color);
+  --icon-color: #9ca3af;
+  --label-color: #374151;
+}
+
+
+.main-page-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,7 +19,7 @@
   font-size: 48px;
   font-weight: bold;
   text-align: center;
-  color: black;
+  color: var(--title-color);
 }
 
 .input-container {
@@ -37,7 +45,7 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  color: #374151;
+  color: var(--label-color);
 }
 
 .input-field {
@@ -47,14 +55,14 @@
 }
 
 .input-field-icon {
-  color: #9ca3af;
+  color: var(--icon-color);
   position: absolute;
   left: 12px;
 }
 
 #username {
   padding: 12px 12px 12px 40px;
-  background: #ffffff;
+  background: white;
   box-sizing: border-box;
   border: 1px solid #d1d5db;
   width: 100%;
@@ -64,21 +72,21 @@
 
 #username:focus {
   border-width: 1px;
-  border-color: #000000;
-  outline: 1px solid black;
+  border-color: var(--focus-color);
+  outline: 1px solid var(--focus-color);
 }
 
-.error-message-container {
+.main-page-container .error-message-container {
   height: 24px;
   overflow: hidden;
 }
 
-.error-message-container.show {
+.main-page-container .error-message-container.show {
   height: 50px;
 }
 
-.error-message {
-  color: red;
+.main-page-container .error-message {
+  color: var(--error-message-color);
   font-size: 12px;
   margin-top: 5px;
 }
@@ -94,7 +102,7 @@
   border-radius: 4px;
   border: 0px;
   cursor: pointer;
-  background: #000000;
+  background: var(--button-background-color);
   width: 100%;
   /* text */
   font-family: "Poppins", sans-serif;
@@ -102,5 +110,5 @@
   font-weight: 500;
   line-height: 24px;
   text-align: center;
-  color: #ffffff;
+  color: var(--button-text-color);
 }

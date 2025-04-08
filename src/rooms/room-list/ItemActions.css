@@ -11,12 +11,12 @@
   justify-content: center;
   /* shape */
   padding: 6px 18px;
-  background: #000000;
+  background: var(--button-background-color);
   border: 0px;
   border-radius: 4px;
   cursor: pointer;
   /* text */
-  color: #ffffff;
+  color: var(--button-text-color);
   font-family: "Poppins", sans-serif;
   font-size: 16px;
   font-weight: 500;

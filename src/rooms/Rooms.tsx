@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import config from "../config";
 import "./Rooms.css";
-import { GameLevel, RoomState } from "../types/types";
+import {
+  ErrorMessage,
+  GameLevel,
+  RoomState,
+  ServerResponseError,
+} from "../types/types";
 import { useNavigate } from "react-router";
 import { removeQuotes } from "../utils/utils";
 import Header from "../components/Header";
@@ -14,8 +19,10 @@ function Rooms() {
   const navigate = useNavigate();
   const [showCreateRoomModal, setShowCreateRoomModal] =
     useState<boolean>(false);
+  const [modalError, setModalError] = useState<string>("");
 
   const [rooms, setRooms] = useState<RoomState[]>([]);
+  const [error, setError] = useState<string>("");
 
   const handleNewRoom = () => {
     setShowCreateRoomModal(true);
@@ -32,6 +39,7 @@ function Rooms() {
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("User not authenticated?");
+      setModalError(ErrorMessage.UserNotAuthenticated);
       return;
     }
     try {
@@ -48,13 +56,25 @@ function Rooms() {
 
       if (response.ok) {
         const roomId = await response.text();
-        console.log(`New room created: ${roomId}`);
+        console.debug(`New room created: ${roomId}`);
         navigate(`/rooms/${gameLevel}/${removeQuotes(roomId)}`);
-      } else {
-        console.error("Failed to create room");
+      } else if (response.status === 400) {
+        const errorMessage = await response.text();
+        console.error("Error message:", errorMessage);
+        if (
+          removeQuotes(errorMessage) ===
+            ServerResponseError.NumberPlayersNotInteger ||
+          removeQuotes(errorMessage) ===
+            ServerResponseError.NumberPlayersNotGreaterThanZero
+        ) {
+          setModalError(ErrorMessage.InvalidNumberOfPlayers);
+        } else {
+          setModalError(ErrorMessage.UnexpectedError);
+        }
       }
     } catch (error) {
       console.error("Error creating room:", error);
+      setModalError(ErrorMessage.ServerError);
     }
   };
 
@@ -62,6 +82,7 @@ function Rooms() {
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("User not authenticated?");
+      setError(ErrorMessage.UserNotAuthenticated);
       return;
     }
     try {
@@ -79,12 +100,20 @@ function Rooms() {
       if (response.ok) {
         const roomsList = (await response.json()) as RoomState[];
         setRooms(roomsList);
-        console.log(roomsList);
-      } else {
+        console.debug(roomsList);
+      } else if (response.status === 400) {
         console.error("Failed to get room list");
+        const errorMessage = await response.text();
+        console.error("Error message:", errorMessage);
+        if (errorMessage.includes(ServerResponseError.PlayerNotFound)) {
+          setError(ErrorMessage.PlayerNotFound);
+        } else {
+          setError(ErrorMessage.UnexpectedError);
+        }
       }
     } catch (error) {
       console.error("Error getting room list:", error);
+      setError(ErrorMessage.ServerError);
     }
   };
 
@@ -98,12 +127,20 @@ function Rooms() {
 
   return (
     /* TODO: Somehow to show the leaderboard of the user and for each level
-     * TODO: Error handling
      */
-    <div className="game-container">
+    <div className="room-container">
       <Header hasBackButton={false} />
       {showCreateRoomModal && (
-        <CreateRoomModal onClose={cancelCreateRoom} onCreate={createNewRoom} />
+        <CreateRoomModal
+          errorMessage={modalError}
+          onClose={cancelCreateRoom}
+          onCreate={createNewRoom}
+        />
+      )}
+      {error && (
+        <div className="error-message-container">
+          <p className="error-message">{error}</p>
+        </div>
       )}
 
       <div className="rooms">

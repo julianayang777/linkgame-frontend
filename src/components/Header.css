@@ -1,7 +1,11 @@
 .game-header {
+  --title-color: var(--button-background-color);
+}
+
+.game-header {
   /* shape */
   padding: 5px 0px;
-  background: #ffffff;
+  background: white;
   box-sizing: border-box;
   border-color: #b8b8c1;
   border-width: 0px 0px 1px 0px;
@@ -17,6 +21,7 @@
 .game-header-content h2 {
   text-align: center;
   grid-column: 2;
+  color: var(--title-color);
 }
 
 .game-header-content button {
@@ -29,12 +34,12 @@
   gap: 8px;
   /* shape */
   padding: 12px 12px;
-  background: #000000;
+  background: var(--button-background-color);
   border: 0px;
   border-radius: 4px;
   cursor: pointer;
   /* text */
-  color: #ffffff;
+  color: var(--button-text-color);
   font-family: "Poppins", sans-serif;
   font-size: 16px;
   font-weight: 500;

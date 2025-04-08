@@ -5,8 +5,13 @@
 .rooms-header {
   display: flex;
   flex-direction: row;
-  justify-content:flex-end;
+  justify-content: flex-end;
   align-items: center;
+}
+
+.room-container .error-message {
+  color: var(--error-message-color);
+  text-align: center;
 }
 
 .new-room-button {
@@ -17,12 +22,12 @@
   gap: 8px;
   /* shape */
   padding: 12px 12px;
-  background: #000000;
+  background-color: var(--button-background-color);
   border: 0px;
   border-radius: 4px;
   cursor: pointer;
   /* text */
-  color: #ffffff;
+  color: var(--button-text-color);
   font-family: "Poppins", sans-serif;
   font-size: 16px;
   font-weight: 500;

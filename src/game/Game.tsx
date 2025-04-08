@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { Board, Coordinate } from "../types/types";
+import {
+  Board,
+  Coordinate,
+  ErrorMessage,
+  ServerResponseError,
+} from "../types/types";
 import config from "../config";
 import Tile from "./Tile";
 import "./Game.css";
 import Header from "../components/Header";
+import { removeQuotes } from "../utils/utils";
 
 function Game() {
   const { level, roomId } = useParams();
@@ -14,6 +20,7 @@ function Game() {
   const [tile2, setTile2] = useState<Coordinate | null>(null);
   /* TEMP: Game Message */
   const [gameMessage, setGameMessage] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,6 +28,7 @@ function Game() {
 
     if (!token || !username) {
       console.error("User not authenticated?");
+      setError(ErrorMessage.UserNotAuthenticated);
       return;
     }
 
@@ -29,28 +37,34 @@ function Game() {
     );
 
     ws.onopen = () => {
-      console.log("WebSocket connection opened");
+      console.debug("WebSocket connection opened");
       wsRef.current = ws;
     };
 
     ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       // TODO: Update game state based on the message
-      console.log("Message from server:", message);
+      console.debug("Message from server:", message);
       if (message.type === "AwaitingPlayers") {
-        console.log("Awaiting other players");
+        console.debug("Awaiting other players");
         setGameMessage("Waiting for other players to join...");
       } else if (message.type === "GameStartsSoon") {
-        console.log("Game start soon in 5 seconds");
+        console.debug("Game start soon in 5 seconds");
         setGameMessage("Game starting soon...");
       } else if (message.type === "InProgress") {
-        console.log("Game in progress");
-        console.log(message.playerBoards[username]);
+        console.debug("Game in progress");
+        console.debug(message.playerBoards[username]);
         setBoard(message.playerBoards[username]);
       } else if (message.type === "Win") {
-        console.log(`Player "${message.winner.name}" wins!`);
+        console.debug(`Player "${message.winner.name}" wins!`);
         setBoard(null);
         setGameMessage(`Player "${message.winner.name}" wins!`);
+      } else if (message.points) {
+        /* Match Response */
+        console.debug("Link path = ", message.points);
+      } else {
+        console.error("Unknown message type:", message.type);
+        setError(ErrorMessage.UnexpectedError);
       }
     };
 
@@ -70,7 +84,7 @@ function Game() {
         );
         if (response.ok) {
           const gameStatus = await response.json();
-          console.log("Game status:", gameStatus);
+          console.debug("Game status:", gameStatus);
           if (gameStatus.type === "Win") {
             setGameMessage(
               `Game has ended\n Player "${gameStatus.winner.name}" won!`
@@ -78,20 +92,34 @@ function Game() {
           } else {
             setGameMessage("Game Status = " + gameStatus.type);
           }
+        } else if (response.status === 404) {
+          const errorMessage = await response.text();
+          console.error("Error message:", errorMessage);
+          const expectedError = ServerResponseError.RoomNotFound.replace(
+            "{roomId}",
+            roomId!
+          );
+          console.debug("Expected error message:", expectedError);
+          if (errorMessage === removeQuotes(expectedError)) {
+            setError(ErrorMessage.RoomNotFound);
+          } else {
+            setError(ErrorMessage.UnexpectedError);
+          }
         }
       } catch (error) {
         console.error("Error fetching game status:", error);
+        setError(ErrorMessage.ServerError);
       }
     };
 
     ws.onclose = () => {
-      console.log("WebSocket connection closed");
+      console.debug("WebSocket connection closed");
     };
   }, [roomId]);
 
   useEffect(() => {
     if (tile1 && tile2) {
-      console.log("Tiles selected:", tile1, tile2);
+      console.debug("Tiles selected:", tile1, tile2);
       const idTimeout = setTimeout(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN) {
           const message = {
@@ -106,9 +134,10 @@ function Game() {
             },
           };
           wsRef.current.send(JSON.stringify(message));
-          console.log("Message sent:", message);
+          console.debug("Message sent:", message);
         } else {
           console.error("WebSocket is not connected");
+          setError(ErrorMessage.ConnectionError);
         }
         setTile1(null);
         setTile2(null);
@@ -122,15 +151,14 @@ function Game() {
   }, [tile1, tile2]);
 
   const handleClick = (x: number, y: number) => {
-    console.log("Tile clicked at coordinates:", x, y);
+    console.debug("Tile clicked at coordinates:", x, y);
     return tile1 ? setTile2({ x, y }) : setTile1({ x, y });
   };
 
   return (
-    // TODO: Error handling
     <div className="game-container">
       <Header hasBackButton={true} />
-      <div className="game">
+      <div className="game-content">
         {board ? (
           <div className={`board ${level}-grid`}>
             {board.map((row, rowIndex) =>
@@ -149,8 +177,14 @@ function Game() {
               ))
             )}
           </div>
+        ) : error ? (
+          <div className="error-message-container">
+            <p className="error-message">{error}</p>
+          </div>
         ) : (
-          <p>{gameMessage}</p>
+          <div className="game-message-container">
+            <p className="game-message">{gameMessage}</p>
+          </div>
         )}
       </div>
     </div>
