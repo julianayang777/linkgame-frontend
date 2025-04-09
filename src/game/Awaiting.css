@@ -1,0 +1,33 @@
+.awaiting-players {
+  --text-color: var(--button-background-color);
+  --progress-bar-color: linear-gradient(#fff8, #fff0),
+    repeating-linear-gradient(135deg, #0003 0 10px, #0000 0 20px), green;
+}
+
+.awaiting-players progress[value] {
+  /* TODO: animation */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  width: 200px;
+  margin: 0 10px;
+  border-radius: 10px;
+  background-color: #eee;
+}
+
+.awaiting-players progress::-webkit-progress-bar {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+.awaiting-players progress::-webkit-progress-value {
+  background: var(--progress-bar-color);
+  border-radius: 10px;
+}
+
+.awaiting-players progress::-moz-progress-bar {
+  background: var(--progress-bar-color);
+  border-radius: 10px;
+}

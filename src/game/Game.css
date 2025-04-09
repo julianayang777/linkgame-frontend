@@ -1,5 +1,6 @@
 .board {
   --grid-size: 60px;
+  --text-color: var(--button-background-color);
 }
 
 .board {
@@ -32,4 +33,25 @@
 
 .game-content .error-message {
   color: var(--error-message-color);
+}
+
+.game-message-container {
+  /* layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.game-state {
+  /* shape */
+  padding: 40px 120px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
+  /* text */
+  text-align: center;
+  color: var(--text-color);
 }

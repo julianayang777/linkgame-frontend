@@ -57,3 +57,33 @@ export interface RoomState {
   status: "Awaiting Players" | "Starts Soon" | "In Progress" | "Finished";
   canJoin: boolean;
 }
+
+export interface Player {
+  name: string;
+}
+
+export type GameState = AwaitingPlayers | GameStartsSoon | Finished;
+
+export interface AwaitingPlayers {
+  type: "AwaitingPlayers";
+  id: string;
+  level: GameLevel;
+  joinedPlayers: number;
+  requiredPlayers: number;
+}
+
+export interface GameStartsSoon {
+  type: "GameStartsSoon";
+  id: string;
+  level: GameLevel;
+  joinedPlayers: Player[];
+  startIn: number; // in milliseconds
+}
+
+export interface Finished {
+  type: "Win" | "Lose";
+  id: string;
+  level: GameLevel;
+  winner: Player;
+  timeTaken: number;
+}

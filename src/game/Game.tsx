@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import {
+  AwaitingPlayers,
   Board,
   Coordinate,
   ErrorMessage,
+  Finished,
+  GameStartsSoon,
+  GameState,
   ServerResponseError,
 } from "../types/types";
 import config from "../config";
@@ -11,6 +15,10 @@ import Tile from "./Tile";
 import "./Game.css";
 import Header from "../components/Header";
 import { removeQuotes } from "../utils/utils";
+import Awaiting from "./Awaiting";
+import StartSoon from "./StartSoon";
+import Win from "./Win";
+import Lose from "./Lose";
 
 function Game() {
   const { level, roomId } = useParams();
@@ -21,6 +29,7 @@ function Game() {
   /* TEMP: Game Message */
   const [gameMessage, setGameMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [gameState, setGameState] = useState<GameState | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -47,10 +56,24 @@ function Game() {
       console.debug("Message from server:", message);
       if (message.type === "AwaitingPlayers") {
         console.debug("Awaiting other players");
-        setGameMessage("Waiting for other players to join...");
+        const gameState: AwaitingPlayers = {
+          type: "AwaitingPlayers",
+          id: roomId!,
+          level: message.gameLevel,
+          joinedPlayers: message.players.length,
+          requiredPlayers: message.requiredPlayers,
+        };
+        setGameState(gameState);
       } else if (message.type === "GameStartsSoon") {
         console.debug("Game start soon in 5 seconds");
-        setGameMessage("Game starting soon...");
+        const gameState: GameStartsSoon = {
+          type: "GameStartsSoon",
+          id: roomId!,
+          level: message.gameLevel,
+          joinedPlayers: message.players,
+          startIn: message.startIn,
+        };
+        setGameState(gameState);
       } else if (message.type === "InProgress") {
         console.debug("Game in progress");
         console.debug(message.playerBoards[username]);
@@ -58,7 +81,14 @@ function Game() {
       } else if (message.type === "Win") {
         console.debug(`Player "${message.winner.name}" wins!`);
         setBoard(null);
-        setGameMessage(`Player "${message.winner.name}" wins!`);
+        const gameState: Finished = {
+          type: username == message.winner.name ? "Win" : "Lose",
+          id: roomId!,
+          level: message.gameLevel,
+          winner: message.winner,
+          timeTaken: message.completionTime,
+        };
+        setGameState(gameState);
       } else if (message.points) {
         /* Match Response */
         console.debug("Link path = ", message.points);
@@ -155,6 +185,22 @@ function Game() {
     return tile1 ? setTile2({ x, y }) : setTile1({ x, y });
   };
 
+  // render all game states except "Inprogress"
+  const renderGameState = () => {
+    if (gameState) {
+      console.log("Game state:", gameState);
+      console.log(gameState.type);
+      if (gameState.type === "AwaitingPlayers") {
+        return <Awaiting state={gameState} />;
+      } else if (gameState.type === "GameStartsSoon") {
+        return <StartSoon state={gameState} />;
+      } else if (gameState.type === "Win") {
+        return <Win state={gameState} />;
+      } else if (gameState.type === "Lose") {
+        return <Lose state={gameState} />;
+      }
+    }
+  };
   return (
     <div className="game-container">
       <Header hasBackButton={true} />
@@ -183,6 +229,7 @@ function Game() {
           </div>
         ) : (
           <div className="game-message-container">
+            {renderGameState()}
             <p className="game-message">{gameMessage}</p>
           </div>
         )}

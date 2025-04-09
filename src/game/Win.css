@@ -1,0 +1,21 @@
+.win h2 {
+  font-family: "Barrio", system-ui;
+  font-size: 66px;
+  font-weight: bold;
+  background: linear-gradient(to top, #f12711, #f5af19);
+  -webkit-background-clip: text;
+  color: transparent;
+  margin: 20px 0;
+}
+
+.trophy {
+  width: 30%;
+  background-size: cover;
+  margin: auto;
+}
+
+.win p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+}
