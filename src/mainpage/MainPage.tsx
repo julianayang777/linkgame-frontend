@@ -23,7 +23,6 @@ function MainPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.debug("Username submitted:", username);
     if (!validateUsername(username)) {
       setError(ErrorMessage.InvalidUsername);
       return;
@@ -47,7 +46,6 @@ function MainPage() {
         }
       );
       if (response.ok) {
-        console.debug("User signed up successfully");
         await login(username);
       } else if (response.status === 400) {
         const errorMessage = await response.text();
@@ -83,8 +81,6 @@ function MainPage() {
       );
       if (response.ok) {
         const token = await response.text();
-        console.debug("User logged in successfully with token: ", token);
-        /* TODO: Improve this? */
         localStorage.setItem("token", removeQuotes(token));
         localStorage.setItem("username", username);
         navigate("/rooms");

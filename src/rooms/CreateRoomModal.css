@@ -180,7 +180,6 @@
 }
 
 .form-error {
-  /* FIXME: when showing error the modal height increases */
   color: var(--error-message-color);
   font-size: 14px;
 }

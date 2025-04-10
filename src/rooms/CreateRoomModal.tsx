@@ -38,13 +38,9 @@ function CreateRoomModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (requiredPlayers && requiredPlayers > 0) {
-      console.debug(
-        `Creating room with ${requiredPlayers} players and game level ${gameLevel}`
-      );
       onCreate(requiredPlayers, gameLevel);
     } else {
       setError("Number of players must be at least 1");
-      console.debug("Number of players must be at least 1");
     }
   };
 

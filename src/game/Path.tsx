@@ -17,7 +17,6 @@ function Path({ points }: PathProps) {
   };
 
   const drawPath = () => {
-    console.log("Drawing path with points:", points);
     const path = points
       .map((point: Coordinate, index) => {
         const { x, y } = getCellCenter(point.row, point.column);

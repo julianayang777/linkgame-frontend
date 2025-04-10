@@ -56,7 +56,6 @@ function Rooms() {
 
       if (response.ok) {
         const roomId = await response.text();
-        console.debug(`New room created: ${roomId}`);
         navigate(`/rooms/${gameLevel}/${removeQuotes(roomId)}`);
       } else if (response.status === 400) {
         const errorMessage = await response.text();
@@ -100,7 +99,6 @@ function Rooms() {
       if (response.ok) {
         const roomsList = (await response.json()) as RoomState[];
         setRooms(roomsList);
-        console.debug(roomsList);
       } else if (response.status === 400) {
         console.error("Failed to get room list");
         const errorMessage = await response.text();
