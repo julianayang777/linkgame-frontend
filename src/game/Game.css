@@ -1,34 +1,58 @@
 .board {
-  --grid-size: 60px;
   --text-color: var(--button-background-color);
+  --cell-size: 60px;
+  --easy-grid-columns: 7;
+  --easy-grid-rows: 8;
+  --medium-grid-columns: 10;
+  --medium-grid-rows: 10;
+  --hard-grid-columns: 12;
+  --hard-grid-rows: 12;
 }
 
 .board {
   display: grid;
-  margin-top: 16px;
-  gap: 5px;
+  /* gap: 5px; */
 }
 
 .easy-grid {
-  grid-template-columns: repeat(7, var(--grid-size));
-  grid-template-rows: repeat(8, var(--grid-size));
+  grid-template-columns: repeat(var(--easy-grid-columns), var(--cell-size));
+  grid-template-rows: repeat(var(--easy-grid-rows), var(--cell-size));
 }
 
 .medium-grid {
-  grid-template-columns: repeat(10, var(--grid-size));
-  grid-template-rows: repeat(10, var(--grid-size));
+  grid-template-columns: repeat(var(--medium-grid-columns), var(--cell-size));
+  grid-template-rows: repeat(var(--medium-grid-rows), var(--cell-size));
 }
 
 .hard-grid {
-  grid-template-columns: repeat(12, var(--grid-size));
-  grid-template-rows: repeat(12, var(--grid-size));
+  grid-template-columns: repeat(var(--hard-grid-columns), var(--cell-size));
+  grid-template-rows: repeat(var(--hard-grid-rows), var(--cell-size));
+}
+
+.board-wrapper-easy {
+  position: relative;
+  width: calc(var(--cell-size) * var(--easy-grid-columns));
+  height: calc(var(--cell-size) * var(--easy-grid-rows));
+}
+
+.board-wrapper-medium {
+  position: relative;
+  width: calc(var(--cell-size) * var(--medium-grid-columns));
+  height: calc(var(--cell-size) * var(--medium-grid-rows));
+}
+
+.board-wrapper-hard {
+  position: relative;
+  width: calc(var(--cell-size) * var(--hard-grid-columns));
+  height: calc(var(--cell-size) * var(--hard-grid-rows));
 }
 
 .game-content {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  margin-top: 16px;
 }
 
 .game-content .error-message {

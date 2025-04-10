@@ -40,12 +40,14 @@ export enum ServerResponseError {
   NumberPlayersNotGreaterThanZero = "Invalid number of players: must be greater than 0.",
   FailedRetrievePlayer = "Failed to retrieve player.",
   RoomNotFound = "Room {roomId} not found.",
+  InvalidMatch = "InvalidMatch",
 }
 
 export type Coordinate = {
-  x: number;
-  y: number;
+  row: number;
+  column: number;
 };
+
 export type Board = number[][];
 
 export interface RoomState {
@@ -62,7 +64,11 @@ export interface Player {
   name: string;
 }
 
-export type GameState = AwaitingPlayers | GameStartsSoon | Finished;
+export type GameState =
+  | AwaitingPlayers
+  | GameStartsSoon
+  | InProgress
+  | Finished;
 
 export interface AwaitingPlayers {
   type: "AwaitingPlayers";
@@ -80,8 +86,15 @@ export interface GameStartsSoon {
   startIn: number; // in milliseconds
 }
 
+export interface InProgress {
+  type: "InProgress";
+  id: string;
+  level: GameLevel;
+  playerBoards: { [key: string]: Board };
+}
+
 export interface Finished {
-  type: "Win" | "Lose";
+  type: "Win" | "Lose" | "Finished";
   id: string;
   level: GameLevel;
   winner: Player;

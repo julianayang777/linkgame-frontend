@@ -5,13 +5,14 @@ type TileProps = {
   value: number;
   position: Coordinate;
   isSelected: boolean;
-  onClick: (x: number, y: number) => void;
+  onClick: (position: Coordinate) => void;
 };
 
 function Tile({ value, onClick, position, isSelected }: TileProps) {
   const handleClick = () => {
-    onClick(position.x, position.y);
+    onClick(position);
   };
+
   return (
     <div
       className={`tile ${value === 0 ? "hidden" : ""} ${

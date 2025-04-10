@@ -8,6 +8,7 @@ import {
   Finished,
   GameStartsSoon,
   GameState,
+  InProgress,
   ServerResponseError,
 } from "../types/types";
 import config from "../config";
@@ -19,17 +20,25 @@ import Awaiting from "./Awaiting";
 import StartSoon from "./StartSoon";
 import Win from "./Win";
 import Lose from "./Lose";
+import GameStateInfo from "./GameStateInfo";
+import Path from "./Path";
 
 function Game() {
   const { level, roomId } = useParams();
   const wsRef = useRef<WebSocket | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const TIMEOUT = 150;
+
   const [board, setBoard] = useState<Board | null>(null);
   const [tile1, setTile1] = useState<Coordinate | null>(null);
   const [tile2, setTile2] = useState<Coordinate | null>(null);
-  /* TEMP: Game Message */
+  const [path, setPath] = useState<Coordinate[]>([]);
+
+  /* TODO: remove TEMP: Game Message */
   const [gameMessage, setGameMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [gameState, setGameState] = useState<GameState | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -51,55 +60,103 @@ function Game() {
     };
 
     ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      // TODO: Update game state based on the message
-      console.debug("Message from server:", message);
-      if (message.type === "AwaitingPlayers") {
-        console.debug("Awaiting other players");
-        const gameState: AwaitingPlayers = {
-          type: "AwaitingPlayers",
-          id: roomId!,
-          level: message.gameLevel,
-          joinedPlayers: message.players.length,
-          requiredPlayers: message.requiredPlayers,
-        };
-        setGameState(gameState);
-      } else if (message.type === "GameStartsSoon") {
-        console.debug("Game start soon in 5 seconds");
-        const gameState: GameStartsSoon = {
-          type: "GameStartsSoon",
-          id: roomId!,
-          level: message.gameLevel,
-          joinedPlayers: message.players,
-          startIn: message.startIn,
-        };
-        setGameState(gameState);
-      } else if (message.type === "InProgress") {
-        console.debug("Game in progress");
-        console.debug(message.playerBoards[username]);
-        setBoard(message.playerBoards[username]);
-      } else if (message.type === "Win") {
-        console.debug(`Player "${message.winner.name}" wins!`);
-        setBoard(null);
-        const gameState: Finished = {
-          type: username == message.winner.name ? "Win" : "Lose",
-          id: roomId!,
-          level: message.gameLevel,
-          winner: message.winner,
-          timeTaken: message.completionTime,
-        };
-        setGameState(gameState);
-      } else if (message.points) {
-        /* Match Response */
-        console.debug("Link path = ", message.points);
-      } else {
-        console.error("Unknown message type:", message.type);
-        setError(ErrorMessage.UnexpectedError);
+      try {
+        const message = JSON.parse(event.data);
+        console.debug("Message from server:", message);
+        if (message.type === "AwaitingPlayers") {
+          console.debug("Awaiting other players");
+          const state: AwaitingPlayers = {
+            type: "AwaitingPlayers",
+            id: roomId!,
+            level: message.gameLevel,
+            joinedPlayers: message.players.length,
+            requiredPlayers: message.requiredPlayers,
+          };
+          setGameState(state);
+        } else if (message.type === "GameStartsSoon") {
+          console.debug("Game start soon in 5 seconds");
+          const state: GameStartsSoon = {
+            type: "GameStartsSoon",
+            id: roomId!,
+            level: message.gameLevel,
+            joinedPlayers: message.players,
+            startIn: message.startIn,
+          };
+          setGameState(state);
+        } else if (message.type === "InProgress") {
+          console.debug("Game in progress");
+          const state: InProgress = {
+            type: "InProgress",
+            id: roomId!,
+            level: message.gameLevel,
+            playerBoards: message.playerBoards,
+          };
+          console.debug(message.playerBoards[username]);
+          setGameState(state);
+          setBoard((prevBoard) => {
+            // When user refreshes the page, the board is null, so we need to set it
+            if (prevBoard === null) {
+              return message.playerBoards[username];
+            }
+            return prevBoard;
+          });
+        } else if (message.type === "Win") {
+          console.debug(`Player "${message.winner.name}" wins!`);
+          setBoard(null);
+          const state: Finished = {
+            type: username === message.winner.name ? "Win" : "Lose",
+            id: roomId!,
+            level: message.gameLevel,
+            winner: message.winner,
+            timeTaken: message.completionTime,
+          };
+          setGameState(state);
+        } else if (message.points) {
+          setPath(message.points);
+
+          timeoutRef.current = setTimeout(() => {
+            setTile1(null);
+            setTile2(null);
+            setPath([]);
+            setGameState((prevState) => {
+              if (prevState?.type === "InProgress") {
+                console.debug(
+                  "Setting board to:",
+                  prevState.playerBoards[username]
+                );
+                setBoard(prevState.playerBoards[username]);
+              } else {
+                console.error("Game state is not InProgress: ", prevState);
+              }
+              return prevState;
+            });
+          }, TIMEOUT);
+        } else {
+          /* Other errors */
+          console.error("Unknown message type:", message.type);
+          setError(ErrorMessage.UnexpectedError);
+        }
+      } catch {
+        /* TODO: Maybe invalid match */
+        const message = event.data;
+        if (message.includes(ServerResponseError.InvalidMatch)) {
+          console.error("Invalid match message:", message);
+          timeoutRef.current = setTimeout(() => {
+            setTile1(null);
+            setTile2(null);
+          }, TIMEOUT);
+        }
       }
     };
 
     ws.onerror = async (error) => {
       console.error("WebSocket error:", error);
+      /* TODO: Cannot connect to websocket can mean:
+       * - Game has ended
+       * - Server is down
+       * - Invalid roomId
+       * - Invalid token
+       */
       /* Maybe the game has ended */
       try {
         const response = await fetch(
@@ -116,10 +173,17 @@ function Game() {
           const gameStatus = await response.json();
           console.debug("Game status:", gameStatus);
           if (gameStatus.type === "Win") {
-            setGameMessage(
-              `Game has ended\n Player "${gameStatus.winner.name}" won!`
-            );
+            const gameState: Finished = {
+              type: "Finished",
+              id: roomId!,
+              level: gameStatus.gameLevel,
+              winner: gameStatus.winner,
+              timeTaken: gameStatus.completionTime,
+            };
+            setGameState(gameState);
+            setShowInfo(true);
           } else {
+            /* TODO: remove this */
             setGameMessage("Game Status = " + gameStatus.type);
           }
         } else if (response.status === 404) {
@@ -142,52 +206,55 @@ function Game() {
       }
     };
 
-    ws.onclose = () => {
-      console.debug("WebSocket connection closed");
+    ws.onclose = (event) => {
+      console.debug("WebSocket connection closed: ", event);
+    };
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
   }, [roomId]);
 
   useEffect(() => {
     if (tile1 && tile2) {
       console.debug("Tiles selected:", tile1, tile2);
-      const idTimeout = setTimeout(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN) {
-          const message = {
-            type: "Match",
-            p1: {
-              row: tile1.x,
-              column: tile1.y,
-            },
-            p2: {
-              row: tile2.x,
-              column: tile2.y,
-            },
-          };
-          wsRef.current.send(JSON.stringify(message));
-          console.debug("Message sent:", message);
-        } else {
-          console.error("WebSocket is not connected");
-          setError(ErrorMessage.ConnectionError);
-        }
-        setTile1(null);
-        setTile2(null);
-        clearTimeout(idTimeout);
-      }, 150);
-
-      return () => {
-        clearTimeout(idTimeout);
-      };
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        const message = {
+          type: "Match",
+          p1: {
+            row: tile1.row,
+            column: tile1.column,
+          },
+          p2: {
+            row: tile2.row,
+            column: tile2.column,
+          },
+        };
+        console.log("Sending message:", message);
+        wsRef.current.send(JSON.stringify(message));
+        console.debug("Message sent:", message);
+      } else {
+        console.error("WebSocket is not connected");
+        setError(ErrorMessage.ConnectionError);
+      }
     }
   }, [tile1, tile2]);
 
-  const handleClick = (x: number, y: number) => {
-    console.debug("Tile clicked at coordinates:", x, y);
-    return tile1 ? setTile2({ x, y }) : setTile1({ x, y });
+  const handleClick = (position: Coordinate) => {
+    console.debug(
+      "Tile clicked at coordinates:",
+      position.row,
+      position.column
+    );
+    return tile1 ? setTile2(position) : setTile1(position);
   };
 
   // render all game states except "Inprogress"
   const renderGameState = () => {
-    if (gameState) {
+    if (!showInfo && gameState) {
       console.log("Game state:", gameState);
       console.log(gameState.type);
       if (gameState.type === "AwaitingPlayers") {
@@ -199,6 +266,8 @@ function Game() {
       } else if (gameState.type === "Lose") {
         return <Lose state={gameState} />;
       }
+    } else if (gameState) {
+      return <GameStateInfo state={gameState} />;
     }
   };
   return (
@@ -206,22 +275,29 @@ function Game() {
       <Header hasBackButton={true} />
       <div className="game-content">
         {board ? (
-          <div className={`board ${level}-grid`}>
-            {board.map((row, rowIndex) =>
-              row.map((tile, colIndex) => (
-                <Tile
-                  key={`${rowIndex}-${colIndex}`}
-                  value={tile}
-                  position={{ x: rowIndex, y: colIndex }}
-                  isSelected={
-                    (tile1 && tile1.x === rowIndex && tile1.y === colIndex) ||
-                    (tile2 && tile2.x === rowIndex && tile2.y === colIndex) ||
-                    false
-                  }
-                  onClick={handleClick}
-                />
-              ))
-            )}
+          <div className={`board-wrapper-${level}`}>
+            <div className={`board ${level}-grid`}>
+              {board.map((row, rowIndex) =>
+                row.map((tile, colIndex) => (
+                  <Tile
+                    key={`${rowIndex}-${colIndex}`}
+                    value={tile}
+                    position={{ row: rowIndex, column: colIndex }}
+                    isSelected={
+                      (tile1 &&
+                        tile1.row === rowIndex &&
+                        tile1.column === colIndex) ||
+                      (tile2 &&
+                        tile2.row === rowIndex &&
+                        tile2.column === colIndex) ||
+                      false
+                    }
+                    onClick={handleClick}
+                  />
+                ))
+              )}
+            </div>
+            <Path points={path} />
           </div>
         ) : error ? (
           <div className="error-message-container">
