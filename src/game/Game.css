@@ -7,11 +7,21 @@
   --medium-grid-rows: 10;
   --hard-grid-columns: 12;
   --hard-grid-rows: 12;
+  --background-color: white;
 }
 
 .board {
   display: grid;
+  /* text */
+  text-align: center;
+  color: var(--text-color);
   /* gap: 5px; */
+  /* shape */
+  padding: 10px;
+  background-color: var(--background-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
 }
 
 .easy-grid {

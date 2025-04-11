@@ -1,6 +1,21 @@
 .tile {
-  --tile-backgroud-color: rgba(155, 155, 155, 0.2);
-  --tile-selected-color: rgba(155, 155, 155, 0.75);
+  --tile-backgroud-color: #faef9e;
+  --tile-shadow-color: #fce49c;
+  --tile-border-color: #e9cf0c;
+  --tile-shadow: 3px 3px 1px 0px var(--tile-shadow-color);
+  --tile-border: 2px solid var(--tile-border-color);
+
+  --tile-selected-color: #fefcec;
+  --tile-selected-shadow-color: #ffdb58;
+  --tile-selected-border-color: #514904;
+  --tile-selected-shadow: 3px 3px 2px 0px var(--tile-selected-shadow-color);
+  --tile-selected-border: 4px double var(--tile-selected-border-color);
+
+  --tile-hover-color: var(--tile-selected-color);
+
+  --tile-active-color: #e9cf0c;
+  --tile-active-shadow-color: #fce49c;
+  --tile-active-shadow: 2px 2px 5px 0px var(--tile-active-shadow-color);
 }
 
 .tile.hidden {
@@ -12,16 +27,35 @@
   justify-content: center;
   align-items: center;
   /* shape */
-  /* border: 1px solid black; */
-  background-color: var(--tile-backgroud-color);
   cursor: default;
+  background-color: var(--tile-backgroud-color);
+  box-shadow: var(--tile-shadow);
+  border: var(--tile-border);
+  border-radius: 6px;
+
   /* text */
   font-size: 48px;
   text-align: center;
   user-select: none;
+
+  transition: background-color 0.2s ease, transform 0.1s ease,
+    box-shadow 0.2s ease;
 }
 
 .selected {
   background-color: var(--tile-selected-color);
-  border: 1px solid black;
+  border: var(--tile-selected-border);
+  box-shadow: var(--tile-selected-shadow);
+}
+
+.tile:hover {
+  cursor: pointer;
+  background-color: var(--tile-hover-color);
+  transform: scale(1.05);
+}
+
+.tile:active {
+  background-color: var(--tile-active-color);
+  transform: scale(0.95);
+  box-shadow: var(--tile-active-shadow);
 }

@@ -1,11 +1,12 @@
 .game-header {
   --title-color: var(--button-background-color);
+  --header-background-color: white;
 }
 
 .game-header {
   /* shape */
   padding: 5px 0px;
-  background: white;
+  background: var(--header-background-color);
   box-sizing: border-box;
   border-color: #b8b8c1;
   border-width: 0px 0px 1px 0px;

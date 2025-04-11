@@ -8,6 +8,7 @@ interface PathProps {
 
 function Path({ points }: PathProps) {
   const cellSize = 60;
+  const color = "#514904";
 
   const getCellCenter = (row: number, col: number) => {
     return {
@@ -23,7 +24,7 @@ function Path({ points }: PathProps) {
         return index === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
       })
       .join(" ");
-    return <path d={path} stroke="black" strokeWidth="3.5" fill="none" />;
+    return <path d={path} stroke={color} strokeWidth="3" fill="none" />;
   };
 
   return <svg className="path-layer">{drawPath()}</svg>;

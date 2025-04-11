@@ -25,6 +25,7 @@
   background-color: var(--button-background-color);
   border: 0px;
   border-radius: 4px;
+  
   cursor: pointer;
   /* text */
   color: var(--button-text-color);

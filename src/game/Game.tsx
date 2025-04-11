@@ -24,7 +24,7 @@ function Game() {
   const { level, roomId } = useParams();
   const wsRef = useRef<WebSocket | null>(null);
   const timeoutRef = useRef<number | null>(null);
-  const TIMEOUT = 150;
+  const TIMEOUT = 200;
 
   const [board, setBoard] = useState<Board | null>(null);
   const [tile1, setTile1] = useState<Coordinate | null>(null);
@@ -246,7 +246,17 @@ function Game() {
   }, [tile1, tile2]);
 
   const handleClick = (position: Coordinate) => {
-    return tile1 ? setTile2(position) : setTile1(position);
+    if (tile1) {
+      if (tile1.row === position.row && tile1.column === position.column) {
+        setTile1(null);
+        return;
+      }
+      const value1 = board![tile1.row][tile1.column];
+      const value2 = board![position.row][position.column];
+      return value1 !== value2 ? setTile1(position) : setTile2(position);
+    } else {
+      return setTile1(position);
+    }
   };
 
   // render all game states except "Inprogress"
