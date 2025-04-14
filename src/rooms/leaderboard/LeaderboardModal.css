@@ -1,0 +1,138 @@
+.modal {
+  --modal-title-color: var(--button-background-color);
+
+  --tab-text-color: #6b7280;
+  --tab-active-color: var(--primary-color);
+  --tab-active-border-color: var(--tab-active-color);
+  --tab-hover-color: #4b5563;
+  --tab-hover-border-color: #d1d5db;
+
+  --player-score-background: linear-gradient(
+    to right,
+    rgb(239, 246, 255),
+    rgb(219, 234, 254)
+  );
+  --player-score-color: var(--tab-active-color);
+}
+
+.modal.leaderboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  max-height: 80vh;
+  
+
+}
+
+.modal.leaderboard h2 {
+  font-weight: 600;
+}
+.modal-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.modal-tabs button {
+  /* display */
+  flex: 1;
+  /* shape */
+  border: none;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 0;
+  background-color: white;
+  /* text */
+  color: var(--tab-text-color);
+  font-weight: 500;
+}
+
+.modal-tabs button.active {
+  font-weight: bolder;
+  border-bottom: 2px solid var(--tab-active-color);
+  color: var(--tab-active-color);
+}
+
+.modal-tabs button.inactive:hover {
+  color: var(--tab-hover-color);
+  border-bottom: 2px solid var(--tab-hover-border-color);
+}
+
+.leaderboard .modal-content {
+  background: #f9fafb;
+  border-top: 1px solid var(--modal-header-border-color);
+  /* for scrolling */
+  overflow-y: auto;
+  flex: 1;
+}
+
+.player-best-score {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background: var(--player-score-background);
+}
+
+.player-best-score .score {
+  font-weight: 500;
+  color: var(--player-score-color);
+}
+
+.leaderboard-list {
+  padding: 0px 16px 10px 16px;
+}
+
+.leaderboard-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.leaderboard-list li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.gold-star {
+  color: #ffd700;
+}
+
+.silver-star {
+  color: #c0c0c0;
+}
+.bronze-star {
+  color: #cd7f32;
+}
+
+.leaderboard-list li .rank {
+  padding: 0px 10px;
+  text-align: center;
+  width: 5%;
+  display: inline-block;
+}
+
+.leaderboard-list li .player-name {
+  padding: 0px 10px;
+  flex: 1;
+}
+
+.leaderboard-list li .player-score {
+  padding: 0px 30px;
+  font-weight: 500;
+  color: var(--player-score-color);
+}

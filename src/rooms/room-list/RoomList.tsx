@@ -4,10 +4,11 @@ import RoomListItem from "./RoomListItem";
 
 interface RoomListProps {
   data: RoomState[];
+  filterAvailable: boolean;
   onClick: (room: RoomState) => void;
 }
 
-function RoomList({ data, onClick }: RoomListProps) {
+function RoomList({ data, filterAvailable, onClick }: RoomListProps) {
   return (
     <div className="room-list">
       <table id="rooms">
@@ -22,7 +23,12 @@ function RoomList({ data, onClick }: RoomListProps) {
         </thead>
         <tbody>
           {data.map((room: RoomState) => (
-            <RoomListItem key={room.id} room={room} onClick={onClick} />
+            <RoomListItem
+              key={room.id}
+              room={room}
+              onClick={onClick}
+              filterAvailable={filterAvailable}
+            />
           ))}
         </tbody>
       </table>

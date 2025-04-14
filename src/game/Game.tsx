@@ -134,6 +134,32 @@ function Game() {
   }, [roomId]);
 
   useEffect(() => {
+    if (path.length > 0) {
+      const username = localStorage.getItem("username");
+
+      if (!username) {
+        console.error("User not authenticated.");
+        setError(ErrorMessage.UserNotAuthenticated);
+        return;
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setTile1(null);
+        setTile2(null);
+        setPath([]);
+        if (gameState?.type === "InProgress") {
+          setBoard(gameState.playerBoards[username]);
+        } else {
+          console.error(
+            "Game state is not InProgress, cannot update board",
+            gameState
+          );
+        }
+      }, TIMEOUT);
+    }
+  }, [path, gameState]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
     const username = localStorage.getItem("username");
 
@@ -170,22 +196,6 @@ function Game() {
         } else if (message.points) {
           /* Response of Match Request */
           setPath(message.points);
-
-          timeoutRef.current = setTimeout(() => {
-            setTile1(null);
-            setTile2(null);
-            setPath([]);
-            setGameState((prevState) => {
-              if (prevState?.type === "InProgress") {
-                setBoard(prevState.playerBoards[username]);
-              } else {
-                console.error(
-                  "Game state is not InProgress, cannot update board"
-                );
-              }
-              return prevState;
-            });
-          }, TIMEOUT);
         } else {
           /* Other errors */
           console.error("Unknown message type:", message.type);
@@ -277,7 +287,11 @@ function Game() {
   };
   return (
     <div className="game-container">
-      <Header hasBackButton={true} />
+      <Header
+        hasBackButton={true}
+        hasLeaderboardButton={false}
+        onLeaderboardClick={() => {}}
+      />
       <div className="game-content">
         {board && gameState && gameState.type !== "Win" ? (
           <div className={`board-wrapper-${level}`}>

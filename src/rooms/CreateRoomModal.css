@@ -1,21 +1,12 @@
 .modal {
+  --modal-header-border-color: #e5e7eb;
   --title-color: var(--button-background-color);
-  --button-selected-border-color: black
+  --button-selected-border-color: black;
 }
 
-.modal {
-  /* layout */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* shape */
-  background: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
+.modal.create-room {
   width: 380px;
   min-height: 420spx;
-  box-sizing: border-box;
-  border-radius: 8px;
   /* text */
   font-size: large;
 }
@@ -32,7 +23,9 @@
   box-sizing: border-box;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
-  border-color: #e5e7eb;
+  border-color: var(--modal-header-border-color);
+  background: var(--button-background-color);
+  color: white;
 }
 
 .modal-header h3 {
@@ -54,12 +47,12 @@
 }
 
 /* Content */
-.modal-content {
+.create-room .modal-content {
   padding: 12px 24px 24px 24px;
   /* shape */
   box-sizing: border-box;
-  justify-content: flex-start; /* Make sure content fills the available space */
-  flex-grow: 1; /* Allow it to take remaining space */
+  justify-content: flex-start; 
+  flex-grow: 1;
 }
 
 .form-group {

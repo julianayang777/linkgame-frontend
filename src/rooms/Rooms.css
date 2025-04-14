@@ -4,8 +4,8 @@
 
 .rooms-header {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  flex-direction: row-reverse;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -22,10 +22,10 @@
   gap: 8px;
   /* shape */
   padding: 12px 12px;
-  background-color: var(--button-background-color);
+  background: var(--button-background-color);
   border: 0px;
   border-radius: 4px;
-  
+
   cursor: pointer;
   /* text */
   color: var(--button-text-color);
@@ -34,4 +34,21 @@
   font-weight: 500;
   line-height: 24px;
   text-align: center;
+}
+
+/* TODO: change shape color */
+.filter-available-button {
+  padding: 10px 10px;
+  padding: 12px 12px;
+  background: var(--button-background-color);
+  border: 0px;
+  border-radius: 4px;
+}
+
+.filter-available-button span {
+  color: var(--button-text-color);
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
 }

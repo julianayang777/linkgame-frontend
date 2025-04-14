@@ -1,6 +1,13 @@
 .game-info {
   display: flex;
-  flex-direction: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-state-header {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 10px;
 }

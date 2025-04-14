@@ -3,12 +3,13 @@
 
 :root {
   --error-message-color: red;
-  --button-background-color: #000000;
+  --primary-color: #1A2980;
+  --secondary-color: #26D0CE;
+  --button-background-color: radial-gradient( circle farthest-corner at 0.2% 0.5%,  rgba(68,36,164,1) 3.7%, rgba(84,212,228,1) 92.7% );
   --button-text-color: white;
   --border-color-1: #b8b8c1;
   --border-color-2: #d1d5db;
 }
-
 
 body {
   background: #f9fafb;
@@ -28,4 +29,22 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+
+.bold {
+  font-weight: bold;
+}
+
+.modal {
+  /* layout */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* shape */
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
 }

@@ -23,6 +23,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
+#rooms thead tr{
+  background: var(--table-header-background-color);
+}
+
 #rooms td,
 #rooms th {
   border: 1px #ddd;
@@ -50,19 +54,19 @@
 #rooms th {
   padding-top: 12px;
   padding-bottom: 12px;
-  background-color: var(--table-header-background-color);
+  background: transparent;
   color: var(--table-header-text-color);
   text-transform: uppercase;
 }
 
-#rooms tr:nth-child(odd) {
-  background-color: var(--table-row-background-color-1);
+#rooms tbody tr:nth-child(odd) {
+  background: var(--table-row-background-color-1);
 }
 
-#rooms tr:nth-child(even) {
-  background-color: var(--table-row-background-color-2);
+#rooms tbody tr:nth-child(even) {
+  background: var(--table-row-background-color-2);
 }
 
-#rooms tr:hover {
-  background-color: var(--table-row-hover-color);
+#rooms tbody tr:hover {
+  background: var(--table-row-hover-color);
 }

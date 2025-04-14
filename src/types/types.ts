@@ -100,3 +100,11 @@ export interface Finished {
   winner: Player;
   timeTaken: number;
 }
+
+export type PlayerScore = [string, number];
+
+export interface Leaderboard {
+  level: GameLevel;
+  playerBestScore: number | null;
+  topPlayers: PlayerScore[];
+}

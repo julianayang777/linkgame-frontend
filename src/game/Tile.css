@@ -28,7 +28,7 @@
   align-items: center;
   /* shape */
   cursor: default;
-  background-color: var(--tile-backgroud-color);
+  background: var(--tile-backgroud-color);
   box-shadow: var(--tile-shadow);
   border: var(--tile-border);
   border-radius: 6px;
@@ -43,19 +43,19 @@
 }
 
 .selected {
-  background-color: var(--tile-selected-color);
+  background: var(--tile-selected-color);
   border: var(--tile-selected-border);
   box-shadow: var(--tile-selected-shadow);
 }
 
 .tile:hover {
   cursor: pointer;
-  background-color: var(--tile-hover-color);
+  background: var(--tile-hover-color);
   transform: scale(1.05);
 }
 
 .tile:active {
-  background-color: var(--tile-active-color);
+  background: var(--tile-active-color);
   transform: scale(0.95);
   box-shadow: var(--tile-active-shadow);
 }

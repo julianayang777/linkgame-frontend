@@ -22,7 +22,11 @@
 .game-header-content h2 {
   text-align: center;
   grid-column: 2;
-  color: var(--title-color);
+  background: var(--title-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .game-header-content button {
@@ -48,15 +52,21 @@
   text-align: center;
 }
 
-.signout-button {
+.right-header {
   /* layout out */
   width: auto;
   justify-self: flex-end;
   align-self: center;
   margin: 0px 24px;
+  /* layout in */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
-.back-button {
+.left-header {
   /* layout out */
   width: auto;
   justify-self: flex-start;

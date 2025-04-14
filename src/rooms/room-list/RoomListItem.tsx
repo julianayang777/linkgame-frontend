@@ -4,13 +4,20 @@ import "./RoomListItem.css";
 
 interface RoomListItemProps {
   room: RoomState;
+  filterAvailable: boolean;
   onClick: (room: RoomState) => void;
 }
 
-function RoomListItem({ room, onClick }: RoomListItemProps) {
+function RoomListItem({ room, onClick, filterAvailable }: RoomListItemProps) {
+  const canJoin =
+    (room.status !== "Finished" || room.joinedPlayers < room.requiredPlayers) &&
+    room.canJoin;
+
   const handleJoin = () => {
     onClick(room);
   };
+
+  if (filterAvailable && !canJoin) return null;
 
   return (
     <tr>

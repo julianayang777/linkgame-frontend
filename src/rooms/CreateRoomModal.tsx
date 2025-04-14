@@ -45,7 +45,7 @@ function CreateRoomModal({
   };
 
   return (
-    <div className="modal">
+    <div className="modal create-room">
       <div className="modal-header">
         <h3>Create New Room</h3>
         <button className="close-button" onClick={onClose}>
