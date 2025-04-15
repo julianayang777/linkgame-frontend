@@ -89,7 +89,7 @@ function Game() {
 
     try {
       const response = await fetch(
-        `http://${config.serverHost}:${config.serverPort}/game/${roomId}/status`,
+        `https://${config.serverHost}:${config.serverPort}/game/${roomId}/status`,
         {
           method: "GET",
           headers: {

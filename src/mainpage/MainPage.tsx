@@ -33,7 +33,7 @@ function MainPage() {
   const signup = async (username: string) => {
     try {
       const response = await fetch(
-        `http://${config.serverHost}:${config.serverPort}/auth/signup`,
+        `https://${config.serverHost}:${config.serverPort}/auth/signup`,
         {
           method: "POST",
           headers: {
@@ -71,7 +71,7 @@ function MainPage() {
   const login = async (username: string) => {
     try {
       const response = await fetch(
-        `http://${config.serverHost}:${config.serverPort}/auth/login/${username}`,
+        `https://${config.serverHost}:${config.serverPort}/auth/login/${username}`,
         {
           method: "POST",
           headers: {
