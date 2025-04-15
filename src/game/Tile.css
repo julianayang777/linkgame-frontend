@@ -34,12 +34,24 @@
   border-radius: 6px;
 
   /* text */
-  font-size: 48px;
+  font-size: var(--tile-font-size);
   text-align: center;
   user-select: none;
 
   transition: background-color 0.2s ease, transform 0.1s ease,
     box-shadow 0.2s ease;
+}
+
+.tile-easy {
+  font-size: calc(var(--cell-size-easy) * 0.8);
+}
+
+.tile-medium {
+  font-size: calc(var(--cell-size-medium) * 0.8);
+}
+
+.tile-hard {
+  font-size: calc(var(--cell-size-hard) * 0.8);
 }
 
 .selected {

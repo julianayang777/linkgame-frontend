@@ -23,7 +23,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-#rooms thead tr{
+#rooms thead tr {
   background: var(--table-header-background-color);
 }
 
@@ -39,7 +39,7 @@
   border-top-left-radius: 4px;
 }
 
-#rooms th:last-child{
+#rooms th:last-child {
   border-top-right-radius: 4px;
 }
 
@@ -69,4 +69,10 @@
 
 #rooms tbody tr:hover {
   background: var(--table-row-hover-color);
+}
+
+@media only screen and (max-width: 600px) {
+  .room-list {
+    font-size: 10px;
+  }
 }

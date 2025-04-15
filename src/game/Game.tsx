@@ -12,7 +12,7 @@ import config from "../config";
 import Tile from "./Tile";
 import "./Game.css";
 import Header from "../components/Header";
-import { removeQuotes } from "../utils/utils";
+import { removeQuotes, toGameLevel } from "../utils/utils";
 import Awaiting from "./Awaiting";
 import StartSoon from "./StartSoon";
 import Win from "./Win";
@@ -300,6 +300,7 @@ function Game() {
                 row.map((tile, colIndex) => (
                   <Tile
                     key={`${rowIndex}-${colIndex}`}
+                    level={toGameLevel(level!)}
                     value={tile}
                     position={{ row: rowIndex, column: colIndex }}
                     isSelected={
@@ -316,7 +317,7 @@ function Game() {
                 ))
               )}
             </div>
-            <Path points={path} />
+            <Path rows={board.length} points={path} />
           </div>
         ) : error ? (
           <div className="error-message-container">

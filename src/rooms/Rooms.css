@@ -1,12 +1,23 @@
+.room-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.room-content {
+  position: relative;
+}
+
 .rooms {
   margin: 40px;
 }
 
 .rooms-header {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
+  flex-direction: row-;
+  justify-content: flex-end;
   align-items: center;
+  gap: 16px;
 }
 
 .room-container .error-message {
@@ -51,4 +62,37 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
+}
+
+@media only screen and (max-width: 600px) {
+  .rooms {
+    margin: 20px;
+  }
+
+  .rooms-header {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .new-room-button {
+    padding: 12px 12px;
+    font-size: 14px;
+  }
+
+  .new-room-button span {
+    display: none;
+  }
+
+  .new-room-button button {
+    justify-content: center;
+  }
+
+  .filter-available-button {
+    padding: 6px 10px;
+  }
+
+  .filter-available-button span {
+    font-size: 14px;
+  }
 }

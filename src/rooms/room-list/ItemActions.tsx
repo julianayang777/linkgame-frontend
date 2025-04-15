@@ -1,4 +1,6 @@
+import { faSignIn } from "@fortawesome/free-solid-svg-icons";
 import "./ItemActions.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ItemActionsProps {
   onClick: () => void;

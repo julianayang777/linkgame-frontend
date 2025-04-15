@@ -1,6 +1,10 @@
-.board {
+.game-content {
   --text-color: var(--button-background-color);
   --cell-size: 60px;
+  --cell-size-easy: var(--cell-size);
+  --cell-size-medium: var(--cell-size);
+  --cell-size-hard: var(--cell-size);
+  --tile-font-size: 48px;
   --easy-grid-columns: 7;
   --easy-grid-rows: 8;
   --medium-grid-columns: 10;
@@ -8,6 +12,7 @@
   --hard-grid-columns: 12;
   --hard-grid-rows: 12;
   --background-color: white;
+  --board-padding: 10px;
 }
 
 .board {
@@ -17,7 +22,7 @@
   color: var(--text-color);
   /* gap: 5px; */
   /* shape */
-  padding: 10px;
+  padding: var(--board-padding);
   background: var(--background-color);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -25,36 +30,39 @@
 }
 
 .easy-grid {
-  grid-template-columns: repeat(var(--easy-grid-columns), var(--cell-size));
-  grid-template-rows: repeat(var(--easy-grid-rows), var(--cell-size));
+  grid-template-columns: repeat(
+    var(--easy-grid-columns),
+    var(--cell-size-easy)
+  );
+  grid-template-rows: repeat(var(--easy-grid-rows), var(--cell-size-easy));
 }
 
 .medium-grid {
-  grid-template-columns: repeat(var(--medium-grid-columns), var(--cell-size));
-  grid-template-rows: repeat(var(--medium-grid-rows), var(--cell-size));
+  grid-template-columns: repeat(
+    var(--medium-grid-columns),
+    var(--cell-size-medium)
+  );
+  grid-template-rows: repeat(var(--medium-grid-rows), var(--cell-size-medium));
 }
 
 .hard-grid {
-  grid-template-columns: repeat(var(--hard-grid-columns), var(--cell-size));
-  grid-template-rows: repeat(var(--hard-grid-rows), var(--cell-size));
+  grid-template-columns: repeat(
+    var(--hard-grid-columns),
+    var(--cell-size-hard)
+  );
+  grid-template-rows: repeat(var(--hard-grid-rows), var(--cell-size-hard));
 }
 
 .board-wrapper-easy {
   position: relative;
-  width: calc(var(--cell-size) * var(--easy-grid-columns));
-  height: calc(var(--cell-size) * var(--easy-grid-rows));
 }
 
 .board-wrapper-medium {
   position: relative;
-  width: calc(var(--cell-size) * var(--medium-grid-columns));
-  height: calc(var(--cell-size) * var(--medium-grid-rows));
 }
 
 .board-wrapper-hard {
   position: relative;
-  width: calc(var(--cell-size) * var(--hard-grid-columns));
-  height: calc(var(--cell-size) * var(--hard-grid-rows));
 }
 
 .game-content {
@@ -88,4 +96,22 @@
   /* text */
   text-align: center;
   color: var(--text-color);
+}
+
+@media only screen and (max-width: 600px) {
+  .game-state {
+    padding: 20px 40px;
+  }
+
+  .game-state.win {
+    max-width: 90%;
+  }
+
+  .game-content {
+    --cell-size: 36px;
+    --cell-size-easy: calc(var(--cell-size) * 1.4);
+    --cell-size-medium: var(--cell-size);
+    --cell-size-hard: calc(var(--cell-size) * 0.83);
+    --board-padding: 2px;
+  }
 }

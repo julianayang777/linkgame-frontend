@@ -47,7 +47,7 @@ function CreateRoomModal({
   return (
     <div className="modal create-room">
       <div className="modal-header">
-        <h3>Create New Room</h3>
+        <h2>Create New Room</h2>
         <button className="close-button" onClick={onClose}>
           <FontAwesomeIcon icon={faXmark} />
         </button>

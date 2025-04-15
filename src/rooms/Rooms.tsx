@@ -212,48 +212,50 @@ function Rooms() {
         hasLeaderboardButton={true}
         onLeaderboardClick={handleLeaderboard}
       />
-      {showCreateRoomModal && (
-        <CreateRoomModal
-          errorMessage={createRoomModalError}
-          onClose={cancelCreateRoom}
-          onCreate={createNewRoom}
-        />
-      )}
+      <div className="room-content">
+        {showCreateRoomModal && (
+          <CreateRoomModal
+            errorMessage={createRoomModalError}
+            onClose={cancelCreateRoom}
+            onCreate={createNewRoom}
+          />
+        )}
 
-      {showLeaderboardModal && (
-        <LeaderboardModal
-          data={leaderboard!}
-          errorMessage={leaderboardError}
-          onLevelChange={(level: GameLevel) => getLeaderboard(level)}
-          onClose={cancelLeaderboard}
-        />
-      )}
+        {showLeaderboardModal && (
+          <LeaderboardModal
+            data={leaderboard!}
+            errorMessage={leaderboardError}
+            onLevelChange={(level: GameLevel) => getLeaderboard(level)}
+            onClose={cancelLeaderboard}
+          />
+        )}
 
-      {error && (
-        <div className="error-message-container">
-          <p className="error-message">{error}</p>
+        {error && (
+          <div className="error-message-container">
+            <p className="error-message">{error}</p>
+          </div>
+        )}
+
+        <div className="rooms">
+          <div className="rooms-header">
+            <button
+              className="filter-available-button"
+              onClick={() => setfilterAvailable(!filterAvailable)}
+            >
+              <span>{filterAvailable ? "Show All" : "Show Available"}</span>
+            </button>
+            <button className="new-room-button" onClick={handleNewRoom}>
+              <span>New Room</span>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </div>
+
+          <RoomList
+            data={rooms}
+            onClick={joinRoom}
+            filterAvailable={filterAvailable}
+          />
         </div>
-      )}
-
-      <div className="rooms">
-        <div className="rooms-header">
-          <button
-            className="filter-available-button"
-            onClick={() => setfilterAvailable(!filterAvailable)}
-          >
-            <span>{filterAvailable ? "Show All" : "Show Available"}</span>
-          </button>
-          <button className="new-room-button" onClick={handleNewRoom}>
-            <span>New Room</span>
-            <FontAwesomeIcon icon={faPlus} />
-          </button>
-        </div>
-
-        <RoomList
-          data={rooms}
-          onClick={joinRoom}
-          filterAvailable={filterAvailable}
-        />
       </div>
     </div>
   );

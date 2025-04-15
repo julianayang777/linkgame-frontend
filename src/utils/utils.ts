@@ -1,3 +1,5 @@
+import { GameLevel } from "../types/types";
+
 export function removeQuotes(str: string): string {
   return str.replace(/^"|"$/g, "");
 }
@@ -23,5 +25,16 @@ export function millisecondsToTime(ms: number | null): string {
     }
   } else {
     return "--:--";
+  }
+}
+
+export function toGameLevel(level: string | undefined): GameLevel | undefined {
+  switch (level) {
+    case "easy":
+      return GameLevel.EASY;
+    case "medium":
+      return GameLevel.MEDIUM;
+    case "hard":
+      return GameLevel.HARD;
   }
 }

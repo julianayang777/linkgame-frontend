@@ -22,13 +22,8 @@
   max-width: 500px;
   height: 100%;
   max-height: 80vh;
-  
-
 }
 
-.modal.leaderboard h2 {
-  font-weight: 600;
-}
 .modal-tabs {
   display: flex;
   flex-direction: row;
@@ -135,4 +130,19 @@
   padding: 0px 30px;
   font-weight: 500;
   color: var(--player-score-color);
+}
+
+@media only screen and (max-width: 600px) {
+  .modal.leaderboard {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    transform: none;
+    max-height: none;
+  }
+
+  .modal-header h2 {
+    margin: 15px 15px;
+  }
 }
