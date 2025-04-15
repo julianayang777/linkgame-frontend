@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Coordinate, GameLevel } from "../types/types";
+import { Coordinate } from "../types/types";
 
 import "./Path.css";
 
