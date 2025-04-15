@@ -4,8 +4,8 @@ interface Config {
 }
 
 const config: Config = {
-    serverHost: "127.0.0.1",
-    serverPort: 8080,
+    serverHost: import.meta.env.VITE_SERVER_HOST,
+    serverPort: Number(import.meta.env.VITE_SERVER_PORT),
 };
 
 export default config;
