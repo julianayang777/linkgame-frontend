@@ -1,11 +1,9 @@
 interface Config {
-    serverHost: string;
-    serverPort: number;
+  baseUrl: string;
 }
 
 const config: Config = {
-    serverHost: import.meta.env.VITE_SERVER_HOST,
-    serverPort: Number(import.meta.env.VITE_SERVER_PORT),
+  baseUrl: import.meta.env.VITE_API_BASE,
 };
 
 export default config;

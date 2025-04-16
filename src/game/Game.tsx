@@ -89,7 +89,7 @@ function Game() {
 
     try {
       const response = await fetch(
-        `https://${config.serverHost}:${config.serverPort}/game/${roomId}/status`,
+        `https://${config.baseUrl}/game/${roomId}/status`,
         {
           method: "GET",
           headers: {
@@ -170,7 +170,7 @@ function Game() {
     }
 
     const ws = new WebSocket(
-      `ws://${config.serverHost}:${config.serverPort}/game/join/${roomId}?authToken=${token}`
+      `wss://${config.baseUrl}/game/join/${roomId}?authToken=${token}`
     );
 
     ws.onopen = () => {
