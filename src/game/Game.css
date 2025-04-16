@@ -107,6 +107,10 @@
     max-width: 90%;
   }
 
+  .game-state.lose {
+    max-width: 90%;
+  }
+
   .game-content {
     --cell-size: 36px;
     --cell-size-easy: calc(var(--cell-size) * 1.4);
@@ -114,4 +118,12 @@
     --cell-size-hard: calc(var(--cell-size) * 0.83);
     --board-padding: 2px;
   }
+}
+
+
+.game-footer {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  text-transform: capitalize;
 }

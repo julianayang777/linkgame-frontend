@@ -39,6 +39,10 @@ input[type="number"] {
   font-weight: bold;
 }
 
+.inline {
+  white-space:nowrap;
+}
+
 .modal {
   /* layout */
   position: absolute;

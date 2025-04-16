@@ -13,19 +13,27 @@ function Path({ rows, points }: PathProps) {
   const color = "#514904";
 
   useEffect(() => {
-    const path_layer = document.querySelector(".path-layer");
+    const updateCellSize = () => {
+      const path_layer = document.querySelector(".path-layer");
 
-    if (path_layer) {
-      const value = window
-        .getComputedStyle(path_layer)
-        .getPropertyValue("height");
+      if (path_layer) {
+        const value = window
+          .getComputedStyle(path_layer)
+          .getPropertyValue("height");
 
-      const parsed = parseFloat(value.trim().replace("px", ""));
+        const parsed = parseFloat(value.trim().replace("px", ""));
 
-      if (!isNaN(parsed)) {
-        setCellSize(parsed / rows);
+        if (!isNaN(parsed)) {
+          setCellSize(parsed / rows);
+        }
       }
-    }
+    };
+
+    updateCellSize();
+
+    window.addEventListener("resize", updateCellSize);
+
+    return () => window.removeEventListener("resize", updateCellSize);
   }, [rows]);
 
   const getCellCenter = (row: number, col: number) => {

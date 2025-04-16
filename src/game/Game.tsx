@@ -32,6 +32,7 @@ function Game() {
   const [path, setPath] = useState<Coordinate[]>([]);
 
   const [error, setError] = useState<string>("");
+  const [roomName, setRoomName] = useState<string>("");
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [showInfo, setShowInfo] = useState(false);
 
@@ -89,7 +90,7 @@ function Game() {
 
     try {
       const response = await fetch(
-        `https://${config.baseUrl}/game/${roomId}/status`,
+        `${config.protocol}://${config.baseUrl}/game/${roomId}/status`,
         {
           method: "GET",
           headers: {
@@ -170,7 +171,7 @@ function Game() {
     }
 
     const ws = new WebSocket(
-      `wss://${config.baseUrl}/game/join/${roomId}?authToken=${token}`
+      `${config.protocol === "http" ? "ws" : "wss"}://${config.baseUrl}/game/join/${roomId}?authToken=${token}`
     );
 
     ws.onopen = () => {
@@ -180,10 +181,15 @@ function Game() {
 
     ws.onmessage = (event) => {
       try {
+        console.log("WebSocket message received:", event.data);
         const message = JSON.parse(event.data);
+        if(roomName == "" && message.name) {
+          setRoomName(message.name);
+        }
         const state = handleStateUpdate(message, message.type);
         if (state) {
           setGameState(state);
+          console.log(state);
           if (state.type === "InProgress") {
             setBoard((prevBoard) => {
               // When user refreshes the page, the board is null, so we need to set it
@@ -293,7 +299,10 @@ function Game() {
         onLeaderboardClick={() => {}}
       />
       <div className="game-content">
-        {board && gameState && gameState.type !== "Win" ? (
+        {board &&
+        gameState &&
+        gameState.type !== "Win" &&
+        gameState.type !== "Lose" ? (
           <div className={`board-wrapper-${level}`}>
             <div className={`board ${level}-grid`}>
               {board.map((row, rowIndex) =>
@@ -326,6 +335,9 @@ function Game() {
         ) : (
           <div className="game-message-container">{renderGameState()}</div>
         )}
+      </div>
+      <div className="game-footer">
+        {roomName} - {level}
       </div>
     </div>
   );

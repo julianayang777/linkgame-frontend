@@ -8,7 +8,7 @@
   margin: 16px 0;
 }
 
-.trophy {
+.sad {
   width: 30%;
   background-size: cover;
   margin: auto;
@@ -16,4 +16,11 @@
 
 .lose p {
   font-size: 16px;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .lose h2 {
+    font-size: 48px;
+  }
 }

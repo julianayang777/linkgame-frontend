@@ -14,8 +14,8 @@ function Lose({ state }: LoseProps) {
       <h2>Game Over</h2>
       <p className="game-message">
         Player <span className="bold">{state.winner.name}</span> won!{" "}
-        <span className="bold">Time Taken: </span>
-        {millisecondsToTime(state.timeTaken)})
+        <span className="inline"><span className="bold">Time Taken: </span>
+        {millisecondsToTime(state.timeTaken)}</span>
       </p>
     </div>
   );

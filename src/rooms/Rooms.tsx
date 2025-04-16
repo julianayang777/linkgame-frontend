@@ -61,7 +61,7 @@ function Rooms() {
     }
     try {
       const response = await fetch(
-        `https://${config.baseUrl}/game/create/${requiredPlayers}/${gameLevel}`,
+        `${config.protocol}://${config.baseUrl}/game/create/${requiredPlayers}/${gameLevel}`,
         {
           method: "POST",
           headers: {
@@ -103,7 +103,7 @@ function Rooms() {
     }
     try {
       const response = await fetch(
-        `https://${config.baseUrl}/game/rooms`,
+        `${config.protocol}://${config.baseUrl}/game/rooms`,
         {
           method: "GET",
           headers: {
@@ -149,7 +149,7 @@ function Rooms() {
     }
     try {
       const response = await fetch(
-        `https://${config.baseUrl}/leaderboard/player/best-scores`,
+        `${config.protocol}://${config.baseUrl}/leaderboard/player/best-scores`,
         {
           method: "GET",
           headers: {
@@ -176,7 +176,7 @@ function Rooms() {
   const getLeaderboard = async (level: GameLevel) => {
     try {
       const response = await fetch(
-        `https://${config.baseUrl}/leaderboard/${level}/top/10`,
+        `${config.protocol}://${config.baseUrl}/leaderboard/${level}/top/10`,
         {
           method: "GET",
           headers: {
