@@ -62,6 +62,16 @@ input[type="number"] {
   font-weight: 600;
 }
 
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 @media only screen and (max-width: 600px) {
   .modal {
     position: relative;
@@ -71,4 +81,8 @@ input[type="number"] {
     transform: none;
     border-radius: 0;
   }
+
+  
 }
+
+

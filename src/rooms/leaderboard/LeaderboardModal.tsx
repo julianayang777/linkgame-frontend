@@ -36,66 +36,71 @@ function LeaderboardModal({
   };
 
   return (
-    <div className="modal leaderboard">
-      <div className="modal-header">
-        <h2>Leaderboard</h2>
-        <button className="close-button" onClick={onClose}>
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-      </div>
-      <div className="modal-tabs">
-        {(Object.values(GameLevel) as string[]).map((difficulty) => (
-          <button
-            key={difficulty}
-            className={`${activeTab === difficulty ? "active" : "inactive"}`}
-            onClick={() => handleTabChange(difficulty)}
-          >
-            {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+    <>
+      <div className="modal-background"></div>
+      <div className="modal leaderboard">
+        <div className="modal-header">
+          <h2>Leaderboard</h2>
+          <button className="close-button" onClick={onClose}>
+            <FontAwesomeIcon icon={faXmark} />
           </button>
-        ))}
-      </div>
-      {data && (
-        <div className="modal-content">
-          <div className="player-best-score">
-            <p className="bold">Your best score:</p>
-            <p className="score">{millisecondsToTime(data.playerBestScore)}</p>
-          </div>
-
-          {errorMessage && (
-            <div className="error-message">
-              <p>{errorMessage}</p>
-            </div>
-          )}
-
-          <div className="leaderboard-list">
-            <h4>Top 10 Players</h4>
-            <ul>
-              {Array.from({ length: 10 }).map((_, index) => {
-                const playerScore = data.topPlayers[index];
-                return (
-                  <li key={index} className="leaderboard-item">
-                    <span className="rank">{getRank(index)}</span>
-                    {playerScore ? (
-                      <>
-                        <span className="player-name">{playerScore[0]}</span>
-                        <span className="player-score">
-                          {millisecondsToTime(playerScore[1])}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="player-name">--</span>
-                        <span className="player-score">--:--</span>
-                      </>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
         </div>
-      )}
-    </div>
+        <div className="modal-tabs">
+          {(Object.values(GameLevel) as string[]).map((difficulty) => (
+            <button
+              key={difficulty}
+              className={`${activeTab === difficulty ? "active" : "inactive"}`}
+              onClick={() => handleTabChange(difficulty)}
+            >
+              {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+            </button>
+          ))}
+        </div>
+        {data && (
+          <div className="modal-content">
+            <div className="player-best-score">
+              <p className="bold">Your best score:</p>
+              <p className="score">
+                {millisecondsToTime(data.playerBestScore)}
+              </p>
+            </div>
+
+            {errorMessage && (
+              <div className="error-message">
+                <p>{errorMessage}</p>
+              </div>
+            )}
+
+            <div className="leaderboard-list">
+              <h4>Top 10 Players</h4>
+              <ul>
+                {Array.from({ length: 10 }).map((_, index) => {
+                  const playerScore = data.topPlayers[index];
+                  return (
+                    <li key={index} className="leaderboard-item">
+                      <span className="rank">{getRank(index)}</span>
+                      {playerScore ? (
+                        <>
+                          <span className="player-name">{playerScore[0]}</span>
+                          <span className="player-score">
+                            {millisecondsToTime(playerScore[1])}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="player-name">--</span>
+                          <span className="player-score">--:--</span>
+                        </>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
