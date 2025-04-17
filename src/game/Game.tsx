@@ -24,6 +24,7 @@ function Game() {
   const { level, roomId } = useParams();
   const wsRef = useRef<WebSocket | null>(null);
   const timeoutRef = useRef<number | null>(null);
+  const roomNameRef = useRef<string>("");
   const TIMEOUT = 200;
 
   const [board, setBoard] = useState<Board | null>(null);
@@ -32,7 +33,6 @@ function Game() {
   const [path, setPath] = useState<Coordinate[]>([]);
 
   const [error, setError] = useState<string>("");
-  const [roomName, setRoomName] = useState<string>("");
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [showInfo, setShowInfo] = useState(false);
 
@@ -102,6 +102,9 @@ function Game() {
 
       if (response.ok) {
         const gameStatus = await response.json();
+        if(roomNameRef.current === "" && gameStatus.name) {
+          roomNameRef.current = gameStatus.name;
+        }
         if (gameStatus.type === "Win") {
           const gameState: Finished = {
             type: "Finished",
@@ -171,7 +174,9 @@ function Game() {
     }
 
     const ws = new WebSocket(
-      `${config.protocol === "http" ? "ws" : "wss"}://${config.baseUrl}/game/join/${roomId}?authToken=${token}`
+      `${config.protocol === "http" ? "ws" : "wss"}://${
+        config.baseUrl
+      }/game/join/${roomId}?authToken=${token}`
     );
 
     ws.onopen = () => {
@@ -181,15 +186,13 @@ function Game() {
 
     ws.onmessage = (event) => {
       try {
-        console.log("WebSocket message received:", event.data);
         const message = JSON.parse(event.data);
-        if(roomName == "" && message.name) {
-          setRoomName(message.name);
+        if (roomNameRef.current == "" && message.name) {
+          roomNameRef.current = message.name;
         }
         const state = handleStateUpdate(message, message.type);
         if (state) {
           setGameState(state);
-          console.log(state);
           if (state.type === "InProgress") {
             setBoard((prevBoard) => {
               // When user refreshes the page, the board is null, so we need to set it
@@ -337,7 +340,7 @@ function Game() {
         )}
       </div>
       <div className="game-footer">
-        {roomName} - {level}
+        {roomNameRef.current} - {level}
       </div>
     </div>
   );
